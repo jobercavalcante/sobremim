@@ -4,9 +4,9 @@
 
 **Goal:** Build a complete, static, narrative personal landing page for Jober Cavalcante that connects his professional identity, decision process, trajectory, specializations, and four verified portfolio cases.
 
-**Architecture:** A semantic HTML document remains fully useful without JavaScript. CSS owns the dark layered design system and responsive case environments; three focused vanilla JavaScript files own general progressive enhancement, the SVG circuit, and the bounded Sonar signal field. Node built-in tests validate structural contracts and pure JavaScript behavior without adding project dependencies.
+**Architecture:** A semantic HTML document remains fully useful without JavaScript. CSS owns the dark layered design system and responsive case environments; three focused vanilla JavaScript files own general progressive enhancement, the SVG circuit, and the bounded Sonar signal field. Node built-in tests validate pure JavaScript and binary assets; browser-facing contracts exercise the served page in a real Chromium instance supplied by the workspace runtime, without adding project dependencies.
 
-**Tech Stack:** HTML5, CSS3, vanilla JavaScript, SVG, Canvas 2D, Node.js built-in `node:test`, PowerShell and a local headless Chromium-compatible browser for screenshots/Lighthouse when available.
+**Tech Stack:** HTML5, CSS3, vanilla JavaScript, SVG, Canvas 2D, Node.js built-in `node:test`, PowerShell, and the workspace-provided Playwright/Chromium runtime for behavioral tests and screenshots.
 
 **Spec:** `docs/superpowers/specs/2026-08-19-personal-landing-design.md`
 
@@ -28,8 +28,10 @@
 
 **Files:**
 
-- Create: `tests/site-contract.test.cjs`
-- Create: `tests/asset-contract.test.cjs`
+- Create: `tests/helpers/site-server.cjs`
+- Create: `tests/site.browser.test.cjs`
+- Create: `tests/asset.test.cjs`
+- Create: `tests/run-tests.ps1`
 - Create: `site/assets/ASSET-SOURCES.md`
 
 **Interfaces:**
@@ -37,35 +39,13 @@
 - Consumes: approved design spec and read-only source repositories.
 - Produces: executable static-site contracts and an asset provenance manifest used by every later task.
 
-- [ ] **Step 1: Write the failing site contract**
+- [ ] **Step 1: Build the real-browser test harness and write the failing site contract**
 
-Create tests with Node built-ins that read `site/index.html`, `site/css/styles.css`, and scripts. Assert that the final page contains exactly one `h1`, a skip link, `main#content`, all four public case names, the two honest product statuses, `mailto:jober.cavalcante@gmail.com`, the GitHub profile, `data-reveal`, a mobile navigation control, Open Graph fields, JSON-LD, and no CDN or `http(s)` script/style dependencies.
-
-```js
-const test = require('node:test');
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-
-const root = path.resolve(__dirname, '..');
-const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
-
-test('the semantic portfolio contract is present', () => {
-  const html = read('site/index.html');
-  assert.equal((html.match(/<h1\b/g) || []).length, 1);
-  assert.match(html, /class="skip-link"/);
-  assert.match(html, /<main\s+id="content"/);
-  for (const name of ['Sonar Promos', 'StreamNest', 'Recanto Beija-Flor', 'ARTEconectaMENTE']) {
-    assert.match(html, new RegExp(name));
-  }
-  assert.match(html, /em teste fechado/i);
-  assert.match(html, /pré-lançamento/i);
-});
-```
+Create a small static server helper and a PowerShell runner that selects the bundled Node/Playwright runtime without installing anything into the project. In `site.browser.test.cjs`, launch Chromium, serve `site/`, and assert through locators and DOM properties that the final page exposes exactly one `h1`, a visible skip link on focus, `main#content`, all four public case names, the two honest product statuses, working email/GitHub destinations, a mobile navigation control, parsed Open Graph fields and JSON-LD. Observe requests and fail on any external script, stylesheet or font request.
 
 - [ ] **Step 2: Run the site contract and verify the expected failure**
 
-Run: `node --test tests/site-contract.test.cjs`
+Run: `.\tests\run-tests.ps1 -TestFiles tests/site.browser.test.cjs`
 
 Expected: FAIL because `site/index.html` does not exist.
 
@@ -75,18 +55,18 @@ Record each selected source path, project, intended use and whether it contains 
 
 - [ ] **Step 4: Write the asset contract**
 
-Assert that every local `src`, `href`, CSS `url()` and script reference resolves within `site/`, except verified external page/profile links; assert that raster images have non-zero dimensions and that `og-1200x630.png` is exactly 1200 × 630 once created.
+Use filesystem and binary-header checks for the provenance manifest and raster dimensions. Use the real browser test to observe every requested local `src`, stylesheet `url()` and script response and fail on 4xx/5xx responses. Verified external page/profile links are navigation destinations, never runtime assets. Add the exact `og-1200x630.png` dimension assertion in Task 6, when that output becomes part of the task contract.
 
 - [ ] **Step 5: Run the focused tests**
 
-Run: `node --test tests/site-contract.test.cjs tests/asset-contract.test.cjs`
+Run: `.\tests\run-tests.ps1 -TestFiles tests/site.browser.test.cjs,tests/asset.test.cjs`
 
 Expected: contract tests fail only for files deliberately produced by later tasks; syntax and test harness pass.
 
 - [ ] **Step 6: Commit the contracts and manifest**
 
 ```powershell
-git add -- tests/site-contract.test.cjs tests/asset-contract.test.cjs site/assets/ASSET-SOURCES.md
+git add -- tests/helpers/site-server.cjs tests/site.browser.test.cjs tests/asset.test.cjs tests/run-tests.ps1 site/assets/ASSET-SOURCES.md
 git commit -m "test: define contratos da landing pessoal"
 ```
 
@@ -115,7 +95,7 @@ Assert the exact section IDs and data hooks, semantic elements (`nav`, `main`, `
 
 - [ ] **Step 2: Run the content tests and confirm failure**
 
-Run: `node --test tests/site-contract.test.cjs`
+Run: `.\tests\run-tests.ps1 -TestFiles tests/site.browser.test.cjs`
 
 Expected: FAIL because the semantic document and hooks are absent.
 
@@ -145,9 +125,9 @@ Set a unique title/description, relative canonical `/`, local OG image `/og-1200
 
 - [ ] **Step 7: Run and pass content and asset tests**
 
-Run: `node --test tests/site-contract.test.cjs tests/asset-contract.test.cjs`
+Run: `.\tests\run-tests.ps1 -TestFiles tests/site.browser.test.cjs,tests/asset.test.cjs`
 
-Expected: PASS except the OG-dimension assertion, which remains skipped until Task 6 by an explicit `fs.existsSync` guard.
+Expected: PASS with no skipped checks; the OG-dimension assertion is introduced in Task 6.
 
 - [ ] **Step 8: Inspect the diff and commit**
 
@@ -165,20 +145,20 @@ git commit -m "feat: estrutura narrativa e cases do portfólio"
 - Copy: `site/assets/fonts/space-grotesk-var.woff2`
 - Copy: `site/assets/fonts/manrope-var.woff2`
 - Modify: `site/assets/ASSET-SOURCES.md`
-- Modify: `tests/site-contract.test.cjs`
+- Modify: `tests/site.browser.test.cjs`
 
 **Interfaces:**
 
 - Consumes: HTML classes and data hooks from Task 2.
 - Produces: tokens, layout, component, case-theme and breakpoint contracts; CSS custom properties `--scroll-progress`, `--circuit-progress`, `--pointer-x`, `--pointer-y`; state classes `.is-visible`, `.is-current`, `.nav-open`, `.is-static`.
 
-- [ ] **Step 1: Add failing CSS contract assertions**
+- [ ] **Step 1: Add failing visual behavior contracts**
 
-Assert exact token names and values, `overflow-x: clip`, local `@font-face` sources, `:focus-visible`, `[data-reveal]`, `.no-js [data-reveal]`, `@media (prefers-reduced-motion: reduce)`, and `@media (max-width: 900px)` rules that hide the Sonar canvas and remove `backdrop-filter`.
+In Chromium, inspect resolved custom properties and computed styles instead of matching CSS source text. Assert the exact palette values, clipped horizontal overflow, successful local font requests, a visible keyboard focus indicator, revealed content with JavaScript, visible content without JavaScript, zero-duration/non-animated states under `prefers-reduced-motion`, and at 900 px or below a hidden Sonar canvas with no active backdrop filter, parallax or pointer transform.
 
 - [ ] **Step 2: Run the CSS contract and confirm failure**
 
-Run: `node --test tests/site-contract.test.cjs`
+Run: `.\tests\run-tests.ps1 -TestFiles tests/site.browser.test.cjs`
 
 Expected: FAIL because `site/css/styles.css` is absent.
 
@@ -204,14 +184,14 @@ At 900 px, remove Canvas, blur and pointer-only transforms; convert the circuit 
 
 - [ ] **Step 8: Run tests and inspect four viewport sizes**
 
-Run: `node --test tests/site-contract.test.cjs tests/asset-contract.test.cjs`
+Run: `.\tests\run-tests.ps1 -TestFiles tests/site.browser.test.cjs,tests/asset.test.cjs`
 
 Then render at 360 × 800, 768 × 1024, 1024 × 768 and 1440 × 1000. Verify no horizontal overflow, readable text and complete focus rings.
 
 - [ ] **Step 9: Commit the visual system**
 
 ```powershell
-git add -- site/css/styles.css site/assets/fonts site/assets/ASSET-SOURCES.md tests/site-contract.test.cjs
+git add -- site/css/styles.css site/assets/fonts site/assets/ASSET-SOURCES.md tests/site.browser.test.cjs
 git commit -m "feat: aplica identidade visual narrativa"
 ```
 
@@ -244,7 +224,7 @@ test('progress is clamped across the scroll range', () => {
 
 - [ ] **Step 2: Run the circuit test and confirm failure**
 
-Run: `node --test tests/circuit-path.test.cjs`
+Run: `.\tests\run-tests.ps1 -TestFiles tests/circuit-path.test.cjs`
 
 Expected: FAIL because the module is absent.
 
@@ -262,7 +242,7 @@ Measure the SVG path once after load and on debounced resize. Update `strokeDash
 
 - [ ] **Step 6: Run and pass circuit tests**
 
-Run: `node --test tests/circuit-path.test.cjs`
+Run: `.\tests\run-tests.ps1 -TestFiles tests/circuit-path.test.cjs`
 
 Expected: PASS.
 
@@ -293,7 +273,7 @@ Assert zero animated signals for reduced motion, zero at widths at or below 900 
 
 - [ ] **Step 2: Run and confirm the expected failure**
 
-Run: `node --test tests/sonar-field.test.cjs`
+Run: `.\tests\run-tests.ps1 -TestFiles tests/sonar-field.test.cjs`
 
 Expected: FAIL because the module is absent.
 
@@ -311,7 +291,7 @@ Use `IntersectionObserver` to start and stop the Canvas. Cancel animation frames
 
 - [ ] **Step 6: Run all automated tests**
 
-Run: `node --test tests/*.test.cjs`
+Run: `.\tests\run-tests.ps1`
 
 Expected: PASS.
 
@@ -333,7 +313,7 @@ git commit -m "feat: adiciona interações progressivas e sonar adaptativo"
 - Create: `site/og.html`
 - Create: `site/og-1200x630.png`
 - Create: `site/robots.txt`
-- Modify: `tests/asset-contract.test.cjs`
+- Modify: `tests/asset.test.cjs`
 
 **Interfaces:**
 
@@ -346,7 +326,7 @@ Remove the temporary existence guard and assert PNG signature plus IHDR width 12
 
 - [ ] **Step 2: Run the asset contract and confirm failure**
 
-Run: `node --test tests/asset-contract.test.cjs`
+Run: `.\tests\run-tests.ps1 -TestFiles tests/asset.test.cjs`
 
 Expected: FAIL because the PNG does not exist.
 
@@ -360,14 +340,14 @@ Allow crawling in `robots.txt` and do not include a sitemap directive. Keep cano
 
 - [ ] **Step 5: Run and pass asset tests**
 
-Run: `node --test tests/asset-contract.test.cjs`
+Run: `.\tests\run-tests.ps1 -TestFiles tests/asset.test.cjs`
 
 Expected: PASS, including exact OG dimensions.
 
 - [ ] **Step 6: Commit share assets**
 
 ```powershell
-git add -- site/og.html site/og-1200x630.png site/robots.txt tests/asset-contract.test.cjs
+git add -- site/og.html site/og-1200x630.png site/robots.txt tests/asset.test.cjs
 git commit -m "feat: adiciona metadados e imagem de compartilhamento"
 ```
 
@@ -386,7 +366,7 @@ git commit -m "feat: adiciona metadados e imagem de compartilhamento"
 
 - [ ] **Step 1: Run all static tests from a clean process**
 
-Run: `node --test tests/*.test.cjs`
+Run: `.\tests\run-tests.ps1`
 
 Expected: PASS with zero skipped tests.
 
