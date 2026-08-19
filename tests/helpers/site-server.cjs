@@ -30,6 +30,13 @@ function isWithinRoot(rootDir, candidate) {
  */
 async function startSiteServer({ rootDir = path.resolve(__dirname, '../../site'), host = '127.0.0.1', port = 0 } = {}) {
   const absoluteRoot = path.resolve(rootDir);
+  let canonicalRoot;
+  try {
+    canonicalRoot = await fs.realpath(absoluteRoot);
+  } catch (error) {
+    if (!error || error.code !== 'ENOENT') throw error;
+    canonicalRoot = absoluteRoot;
+  }
 
   const server = http.createServer(async (request, response) => {
     if (request.method !== 'GET' && request.method !== 'HEAD') {
@@ -55,9 +62,25 @@ async function startSiteServer({ rootDir = path.resolve(__dirname, '../../site')
       return;
     }
 
+    let canonicalFilePath;
     try {
-      const file = await fs.readFile(filePath);
-      const contentType = CONTENT_TYPES[path.extname(filePath).toLowerCase()] || 'application/octet-stream';
+      canonicalFilePath = await fs.realpath(filePath);
+    } catch (error) {
+      const status = error && error.code === 'EISDIR' ? 403 : 404;
+      response.writeHead(status, { 'Content-Type': 'text/plain; charset=utf-8' });
+      response.end(status === 404 ? 'Not found' : 'Forbidden');
+      return;
+    }
+
+    if (!isWithinRoot(canonicalRoot, canonicalFilePath)) {
+      response.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+      response.end('Forbidden');
+      return;
+    }
+
+    try {
+      const file = await fs.readFile(canonicalFilePath);
+      const contentType = CONTENT_TYPES[path.extname(canonicalFilePath).toLowerCase()] || 'application/octet-stream';
       response.writeHead(200, {
         'Cache-Control': 'no-store',
         'Content-Length': file.byteLength,
