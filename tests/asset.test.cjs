@@ -7,6 +7,7 @@ const test = require('node:test');
 
 const repoRoot = path.resolve(__dirname, '..');
 const manifestPath = path.join(repoRoot, 'site', 'assets', 'ASSET-SOURCES.md');
+const ogImagePath = path.join(repoRoot, 'site', 'og-1200x630.png');
 const destinationRoot = path.join(repoRoot, 'site', 'assets');
 const sourceRoots = [
   path.resolve('E:/projetos/jober/page/docs'),
@@ -100,6 +101,14 @@ function expectedDimensions(value) {
 }
 
 const assets = parseManifest();
+test('Open Graph image is an exact 1200×630 PNG', () => {
+  assert.ok(fs.existsSync(ogImagePath), 'Open Graph image must exist');
+  const bytes = fs.readFileSync(ogImagePath);
+  assert.deepEqual([...bytes.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], 'Open Graph image must have a PNG signature');
+  assert.equal(bytes.readUInt32BE(16), 1200, 'Open Graph image width must be 1200 pixels');
+  assert.equal(bytes.readUInt32BE(20), 630, 'Open Graph image height must be 630 pixels');
+});
+
 const responsiveAssets = [
   ['brand/jober-console-256w.webp', 'brand/logo-console.png', 512],
   ['brand/jober-console-512w.webp', 'brand/logo-console.png', 512],
