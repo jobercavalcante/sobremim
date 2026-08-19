@@ -20,8 +20,8 @@ Build and fully verify Jober Cavalcante's narrative personal landing page from t
 | T1 | Test contracts and asset inventory | mechanical-executor | gpt-5.6-luna / xhigh | T0 | DONE | clean after fix round 1 | harness + 1/1 server regression; final-page RED handed to T2 |
 | T2 | Brand assets and semantic narrative | integration-executor | gpt-5.6-terra / medium | T1 | DONE | clean after fix round 1 | 44/44 browser + asset checks, zero skips |
 | T3 | Dark narrative design system | integration-executor | gpt-5.6-terra / medium | T2 | DONE | clean; 1 deferred Minor | 46/46 browser + asset checks, zero skips |
-| T4 | SVG circuit engine | integration-executor | gpt-5.6-terra / medium | T3 | PLANNED | task-reviewer pending | `tests/run-tests.ps1 -TestFiles tests/circuit-path.test.cjs` |
-| T5 | Progressive enhancement and Sonar field | integration-executor | gpt-5.6-terra / medium | T4 | PLANNED | task-reviewer pending | all Node tests + keyboard/no-js |
+| T4 | SVG circuit engine | integration-executor | gpt-5.6-terra / medium | T3 | DONE | clean after fix round 1 | 6/6 lifecycle + 46/46 browser/assets |
+| T5 | Progressive enhancement and Sonar field | integration-executor | gpt-5.6-terra / medium | T4 | IN PROGRESS | task-reviewer pending | all Node tests + keyboard/no-js |
 | T6 | OG and crawler assets | mechanical-executor | gpt-5.6-luna / xhigh | T3 | PLANNED | task-reviewer pending | OG dimension and asset contracts |
 | T7 | Integrated QA and evidence | integration-executor | gpt-5.6-terra / medium | T2-T6 | PLANNED | task-reviewer pending | static, browser, mobile, a11y, SEO, performance |
 | T8 | Complete change-set review | final-reviewer | gpt-5.6-sol / medium | T7 | PLANNED | pending | full evidence bundle |
@@ -59,3 +59,4 @@ Build and fully verify Jober Cavalcante's narrative personal landing page from t
 - 2026-08-19: T2 delivered complete semantic copy, verified contact/metadata, SVG brand system, 11 provenance-preserving originals and 20 responsive WebP derivatives. Review-required optimization was fixed in `b194ea1`; both published case URLs returned HTTP 200. Exact-h1 test coverage remains a deferred Minor.
 - 2026-08-19: T3 delivered the dark narrative system, fixed navigation/hero/process composition, case-specific art direction and complete 360/768/1024/1440 responsive states in `3936c26`; 46 browser/asset checks passed with zero skips. Independent review found no behavioral defect. Deferred Minor: final QA must pin computed states for `.reveal-ready`, `.nav-ready` and `.circuit-ready` rather than only layout visibility.
 - 2026-08-19: Impeccable brand context was materialized from the user-approved brief and the implemented CSS in `PRODUCT.md`, `DESIGN.md` and `.impeccable/design.json`; local live-mode configuration found no CSP and covers `site/**/*.html` without injecting runtime code into the delivered site.
+- 2026-08-19: T4 delivered the opt-in UMD circuit controller in `76fa44c`. Review-required lifecycle coverage was added in `ee591cb` for readiness, passive scroll/RAF coalescing, resize debounce, hidden tabs, reduced motion, modern/legacy media queries and teardown; fresh re-review was clean.
