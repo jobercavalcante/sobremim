@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-19T21:36:42.8223597Z",
+  "title": "Design System: Jober Cavalcante — Decisões em Circuito",
+  "extensions": {
+    "colorMeta": {
+      "ink": { "role": "neutral", "displayName": "Tinta Abissal", "canonical": "#01091F", "tonalRamp": ["#01040F", "#01091F", "#021653", "#061D46", "#0A2855", "#2E5D8F", "#7897B6", "#D5E4F2"] },
+      "ink-soft": { "role": "neutral", "displayName": "Navy de Origem", "canonical": "#021653", "tonalRamp": ["#01040F", "#01091F", "#021653", "#061D46", "#0A2855", "#2E5D8F", "#7897B6", "#D5E4F2"] },
+      "surface": { "role": "neutral", "displayName": "Superfície Profunda", "canonical": "#061D46", "tonalRamp": ["#01040F", "#01091F", "#021653", "#061D46", "#0A2855", "#2E5D8F", "#7897B6", "#D5E4F2"] },
+      "surface-raised": { "role": "neutral", "displayName": "Superfície Elevada", "canonical": "#0A2855", "tonalRamp": ["#01040F", "#01091F", "#021653", "#061D46", "#0A2855", "#2E5D8F", "#7897B6", "#D5E4F2"] },
+      "electric": { "role": "primary", "displayName": "Azul Elétrico", "canonical": "#1773F4", "tonalRamp": ["#041431", "#062A63", "#0A479C", "#1773F4", "#4B94F7", "#83B7FA", "#BBD9FC", "#EDF6FF"] },
+      "cyan": { "role": "primary", "displayName": "Ciano de Decisão", "canonical": "#1AE3E7", "tonalRamp": ["#032B2D", "#04585B", "#07878A", "#00BEC7", "#1AE3E7", "#66EDF0", "#AAF6F8", "#E9FDFD"] },
+      "cyan-strong": { "role": "primary", "displayName": "Ciano Estrutural", "canonical": "#00BEC7", "tonalRamp": ["#032B2D", "#04585B", "#07878A", "#00BEC7", "#1AE3E7", "#66EDF0", "#AAF6F8", "#E9FDFD"] },
+      "text": { "role": "neutral", "displayName": "Texto Frio", "canonical": "#F2F5F7", "tonalRamp": ["#11171C", "#26333E", "#435666", "#7897B6", "#ABC3D9", "#D5E4F2", "#F2F5F7", "#FFFFFF"] },
+      "muted": { "role": "neutral", "displayName": "Texto Secundário", "canonical": "#ABC3D9", "tonalRamp": ["#11171C", "#26333E", "#435666", "#7897B6", "#ABC3D9", "#D5E4F2", "#F2F5F7", "#FFFFFF"] },
+      "dim": { "role": "neutral", "displayName": "Telemetria Discreta", "canonical": "#7897B6", "tonalRamp": ["#11171C", "#26333E", "#435666", "#7897B6", "#ABC3D9", "#D5E4F2", "#F2F5F7", "#FFFFFF"] },
+      "sonar-gold": { "role": "secondary", "displayName": "Ouro de Match", "canonical": "#E5BD58", "tonalRamp": ["#302609", "#5F4A0F", "#90721E", "#BE9834", "#E5BD58", "#EDD181", "#F5E5B0", "#FFF9E5"] },
+      "recanto-green": { "role": "secondary", "displayName": "Verde de Raiz", "canonical": "#9BAE7F", "tonalRamp": ["#17200E", "#304022", "#4C6139", "#6E8257", "#9BAE7F", "#B9C7A5", "#D8E0CE", "#F5F8F1"] },
+      "arte-coral": { "role": "secondary", "displayName": "Coral Orbital", "canonical": "#EC907D", "tonalRamp": ["#35130E", "#68291F", "#984234", "#C86150", "#EC907D", "#F2B2A4", "#F8D5CD", "#FFF2EF"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Headline principal, limitada a 12ch." },
+      "headline": { "displayName": "Headline", "purpose": "Títulos de seção, limitados a 18ch." },
+      "title": { "displayName": "Title", "purpose": "Cases e agrupamentos técnicos." },
+      "body": { "displayName": "Body", "purpose": "Leitura contínua, limitada a 72ch." },
+      "label": { "displayName": "Signal Label", "purpose": "Kickers e estados curtos do circuito." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease-decision", "value": "cubic-bezier(.2, .8, .2, 1)", "purpose": "Transições de estado e reveal." },
+      { "name": "reveal", "value": "450ms", "purpose": "Entrada curta autorizada apenas após `.reveal-ready`." },
+      { "name": "skip-link", "value": "160ms", "purpose": "Resposta imediata do skip link ao foco." }
+    ],
+    "breakpoints": [
+      { "name": "compact", "value": "600px" },
+      { "name": "mobile", "value": "900px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary CTA",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Chamada ciano única para iniciar o percurso.",
+      "html": "<a class=\"ds-primary-cta\" href=\"#process\">Ver decisões em prática</a>",
+      "css": ".ds-primary-cta { display:inline-grid; place-items:center; min-height:44px; padding:.65rem 1rem; border:1px solid #1AE3E7; border-radius:8px; background:#1AE3E7; color:#01091F; font:800 1rem/1.6 system-ui,sans-serif; text-decoration:none; transition:color .16s cubic-bezier(.2,.8,.2,1); } .ds-primary-cta:hover { color:#F2F5F7; } .ds-primary-cta:focus-visible { outline:3px solid #1AE3E7; outline-offset:4px; }"
+    },
+    {
+      "name": "Case Link",
+      "kind": "button",
+      "refersTo": "button-case",
+      "description": "Ação contextual transparente, aqui demonstrada com o sinal Sonar.",
+      "html": "<a class=\"ds-case-link\" href=\"#\">Conhecer o projeto</a>",
+      "css": ".ds-case-link { display:inline-grid; place-items:center; min-height:44px; padding:.65rem 1rem; border:1px solid #E5BD58; border-radius:8px; background:transparent; color:#E5BD58; font:800 1rem/1.6 system-ui,sans-serif; text-decoration:none; } .ds-case-link:hover { color:#F2F5F7; } .ds-case-link:focus-visible { outline:3px solid #1AE3E7; outline-offset:4px; }"
+    },
+    {
+      "name": "Navigation Link",
+      "kind": "nav",
+      "refersTo": "navigation-link",
+      "description": "Navegação compacta com alvo completo e foco inequívoco.",
+      "html": "<a class=\"ds-nav-link\" href=\"#work\">Trabalhos</a>",
+      "css": ".ds-nav-link { display:inline-grid; place-items:center; min-height:44px; color:#ABC3D9; font:700 .78rem/1.6 ui-monospace,Consolas,monospace; letter-spacing:.09em; text-decoration:none; } .ds-nav-link:hover { color:#1AE3E7; } .ds-nav-link:focus-visible { outline:3px solid #1AE3E7; outline-offset:4px; }"
+    },
+    {
+      "name": "Process Node",
+      "kind": "custom",
+      "description": "Nó compacto que une verbo, decisão e linha condutora.",
+      "html": "<div class=\"ds-process-node\"><span></span><strong>Investigar.</strong><p>Tornar o problema observável.</p></div>",
+      "css": ".ds-process-node { position:relative; max-width:220px; padding-top:1.4rem; color:#ABC3D9; font:400 .9rem/1.6 system-ui,sans-serif; } .ds-process-node span { position:absolute; top:0; left:0; width:10px; height:10px; border:2px solid #1AE3E7; border-radius:50%; background:#01091F; } .ds-process-node strong { display:block; color:#F2F5F7; font-family:ui-rounded,'Segoe UI',system-ui,sans-serif; } .ds-process-node p { margin:0; }"
+    },
+    {
+      "name": "Case Environment",
+      "kind": "card",
+      "description": "Seção editorial aberta, sem virar um cartão genérico.",
+      "html": "<article class=\"ds-case\"><p class=\"ds-case-label\">PRODUTO ANDROID</p><h3>Sonar Promos</h3><p>Sinais selecionados em contexto.</p></article>",
+      "css": ".ds-case { max-width:620px; padding:3rem 0; border-top:1px solid rgba(171,195,217,.25); background:#01091F; color:#F2F5F7; } .ds-case h3 { margin:.5rem 0 1rem; color:#E5BD58; font:700 2rem/1.05 ui-rounded,'Segoe UI',system-ui,sans-serif; letter-spacing:-.035em; } .ds-case p { max-width:72ch; color:#ABC3D9; font:400 1rem/1.6 system-ui,sans-serif; } .ds-case-label { color:#E5BD58 !important; font:700 .78rem/1.6 ui-monospace,Consolas,monospace !important; letter-spacing:.09em; }"
+    },
+    {
+      "name": "Scroll Signal",
+      "kind": "custom",
+      "description": "Telemetria vertical discreta que acompanha o circuito.",
+      "html": "<div class=\"ds-scroll-signal\"><i></i><span>Decisões em percurso</span></div>",
+      "css": ".ds-scroll-signal { display:grid; grid-template-columns:2px auto; gap:.5rem; color:#7897B6; font:700 .65rem/1.6 ui-monospace,Consolas,monospace; letter-spacing:.08em; text-transform:uppercase; } .ds-scroll-signal i { display:block; width:2px; height:90px; background:linear-gradient(to bottom,#1AE3E7 58%,#0A2855 58%); } .ds-scroll-signal span { writing-mode:vertical-rl; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "O Circuito que Só Fecha Quando Faz Sentido",
+    "overview": "Um campo navy profundo recebe sinais elétricos curtos e controlados. A composição é assimétrica, precisa e contínua: cada seção parece uma mudança de estado da mesma investigação, não um novo template. A marca deve parecer elétrica, investigativa e pragmática. A interface rejeita espetáculo tecnológico e ornamentação sem função. Movimento explica progresso; imagens provam trabalho; divisores e iluminação tonal organizam profundidade. Conteúdo, navegação e contato permanecem completos antes de qualquer enhancement.",
+    "keyCharacteristics": [
+      "Navy em quatro profundidades, com ciano como único acento global dominante.",
+      "Tipografia de sistema com escala fluida e contraste decidido entre títulos, corpo e estados.",
+      "Uma linha condutora une processo, cases e contato.",
+      "Art direction local dos cases sem contaminar a identidade pessoal.",
+      "Mobile e movimento reduzido são estados completos, não versões degradadas."
+    ],
+    "rules": [
+      { "name": "The One Global Signal Rule", "body": "O ciano é o único acento global; cores dos projetos nunca entram em navegação, hero ou contato.", "section": "colors" },
+      { "name": "The No Purple SaaS Rule", "body": "Roxo genérico, gradiente de texto e glow espalhado são proibidos.", "section": "colors" },
+      { "name": "The Problem First Rule", "body": "A maior frase da página é uma ideia compreensível, nunca uma stack ou um cargo inflado.", "section": "typography" },
+      { "name": "The Native Type Rule", "body": "Nenhuma fonte remota, CDN ou arquivo sem licença verificável pode entrar na página.", "section": "typography" },
+      { "name": "The Tonal Depth Rule", "body": "Se uma superfície precisa de sombra grande para se separar, a composição tonal está errada.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do começar cada decisão visual pelo problema ou pela evidência que ela ajuda a explicar.",
+      "Do manter corpo em até 72ch, controles com no mínimo 44px e foco ciano de 3px.",
+      "Do usar imagens locais reais, proporcionais e responsivas para provar os quatro cases.",
+      "Do preservar conteúdo, navegação, circuito e contato visíveis antes de qualquer enhancement.",
+      "Do desligar Canvas, blur, backdrop-filter, tilt e parallax em até 900px e em movimento reduzido quando aplicável."
+    ],
+    "donts": [
+      "Don't usar terminal cenográfico, Matrix, uma landing SaaS roxa, um bento genérico, uma nuvem de logos ou skill bars.",
+      "Don't aplicar glassmorphism global, grid decorativo, gradiente de texto, chuva de partículas ou efeitos simultâneos.",
+      "Don't transformar seções em uma coleção de cartões arredondados ou combinar borda com sombra ampla.",
+      "Don't inventar métricas, depoimentos, resultados, cargos, disponibilidade pública ou a alegação de ‘AI Expert’.",
+      "Don't usar estética editorial por reflexo; o ritmo editorial existe para sustentar a narrativa de decisões.",
+      "Don't repetir pequenos kickers em caixa alta como andaime visual fora das coordenadas já justificadas."
+    ]
+  }
+}
