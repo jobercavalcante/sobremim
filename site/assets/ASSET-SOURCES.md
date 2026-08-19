@@ -1,0 +1,21 @@
+# Asset sources
+
+Este inventário é a fonte de proveniência para os assets selecionados da landing. Cada origem é um caminho local de um projeto pertencente ao usuário ou do logo pessoal fornecido no checkout; nenhum arquivo foi alterado nos repositórios de origem. As cópias devem conservar a origem registrada nesta tabela e podem ser otimizadas somente no destino.
+
+Foram priorizados logos próprios, previews e screenshots de interface. Não foram selecionadas telas confidenciais, credenciais, fotografias pessoais identificáveis ou materiais que dependam de alegações de saúde não verificadas. Marcas de plataforma que aparecem incidentalmente em algumas interfaces (por exemplo, Telegram, Android, DLNA ou Chromecast) são classificadas explicitamente na tabela e não serão tratadas como assets de runtime de terceiros.
+
+| Project | Source path | Destination path | Intended use | Third-party or personal imagery | Source dimensions |
+| --- | --- | --- | --- | --- | --- |
+| Personal identity | E:\projetos\jober\page\docs\logo-console.png | brand/logo-console.png | Fallback raster do logo pessoal no brand system | Projeto do usuário; logo próprio; sem imagem pessoal identificável ou terceiro | 512×512 |
+| StreamNest | E:\projetos\streamNest\page\site\assets\streamnest-social-preview-1200x630.png | projects/streamnest/streamnest-social-preview.png | Evidência visual do case e composição de compartilhamento | Projeto do usuário; UI/ilustração própria; contém marcas de plataforma (Telegram/Android/Cast); sem imagem pessoal identificável | 1200×630 |
+| StreamNest | E:\projetos\streamNest\page\site\assets\icon.png | projects/streamnest/icon.png | Marca do produto no case StreamNest | Projeto do usuário; ícone próprio; sem imagem pessoal identificável ou terceiro | 1254×1254 |
+| Sonar Promos | E:\projetos\sonapromos\page\site\assets\sonar-promos-social-preview-1200x630.png | projects/sonar-promos/sonar-promos-social-preview.png | Evidência visual do case Sonar Promos | Projeto do usuário; UI/ilustração própria; contém marcas de plataforma (Telegram/Android); sem imagem pessoal identificável | 1200×630 |
+| Sonar Promos | E:\projetos\sonapromos\page\site\assets\app\sonar-dark.png | projects/sonar-promos/sonar-dark.png | Screenshot da interface de alertas | Projeto do usuário; screenshot de UI; contém marca/interface Telegram; sem imagem pessoal identificável | 620×1340 |
+| Sonar Promos | E:\projetos\sonapromos\page\site\assets\app\resumo-dark.png | projects/sonar-promos/resumo-dark.png | Screenshot da interface de resumo | Projeto do usuário; screenshot de UI; contém marca/interface Telegram; sem imagem pessoal identificável | 620×1340 |
+| Sonar Promos | E:\projetos\sonapromos\page\site\assets\app\feed-dark.png | projects/sonar-promos/feed-dark.png | Screenshot da interface de feed | Projeto do usuário; screenshot de UI; contém marca/interface Telegram; sem imagem pessoal identificável | 620×1340 |
+| Sonar Promos | E:\projetos\sonapromos\page\site\assets\logo.svg | projects/sonar-promos/logo.svg | Referência de marca local do case Sonar | Projeto do usuário; logo vetorial próprio; sem imagem pessoal identificável ou terceiro | 1254×1254 |
+| Recanto Beija-Flor | E:\projetos\recanto-beijaflor\site\media\logo.jpg | projects/recanto-beija-flor/logo.jpg | Marca local e evidência visual do case Recanto | Projeto do usuário; logo próprio; sem pessoa identificável ou terceiro | 512×512 |
+| ARTEconectaMENTE | E:\projetos\Daniiiii\site\assets\og-share.webp | projects/arteconectamente/og-share.webp | Evidência visual da linguagem editorial do case | Projeto do usuário; composição/ilustração própria; sem pessoa identificável ou terceiro | 1568×823 |
+| ARTEconectaMENTE | E:\projetos\Daniiiii\site\assets\curadoria\arte-mente-alma.png | projects/arteconectamente/arte-mente-alma.png | Elemento visual editorial do case | Projeto do usuário; arte própria do projeto; sem pessoa identificável ou terceiro | 750×750 |
+
+Todos os caminhos acima são derivados de projetos locais de propriedade do usuário. Links públicos de perfil ou páginas externas, quando usados na landing, são destinos de navegação e não assets de runtime.
