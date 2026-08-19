@@ -227,3 +227,50 @@ test('narrative layout remains contained and readable at supported viewports', a
     await server.close();
   }
 });
+
+test('progressive interaction controllers mount safely and preserve keyboard behavior', async () => {
+  const server = await startSiteServer();
+  const browser = await chromium.launch({ executablePath: browserExecutable(), headless: true });
+  const desktop = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  const mobile = await browser.newPage({ viewport: { width: 768, height: 900 } });
+  const reduced = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+  const consoleErrors = [];
+  const requestFailures = [];
+
+  for (const page of [desktop, mobile, reduced]) {
+    page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
+    page.on('requestfailed', (request) => requestFailures.push(request.url()));
+  }
+
+  try {
+    await Promise.all([desktop.goto(`${server.baseUrl}/`, { waitUntil: 'load' }), mobile.goto(`${server.baseUrl}/`, { waitUntil: 'load' }), reduced.goto(`${server.baseUrl}/`, { waitUntil: 'load' })]);
+    await desktop.waitForFunction(() => document.documentElement.classList.contains('nav-ready') && document.documentElement.classList.contains('reveal-ready') && document.documentElement.classList.contains('circuit-ready'));
+    await desktop.waitForFunction(() => document.querySelectorAll('[data-nav-panel] a[aria-current="location"]').length === 1);
+    assert.equal(await desktop.locator('[data-sonar-field] canvas').count(), 1, 'eligible desktop mounts one Sonar canvas');
+    assert.equal(await mobile.locator('[data-sonar-field] canvas').count(), 0, 'mobile must not mount a Sonar canvas');
+    assert.equal(await reduced.locator('[data-sonar-field] canvas').count(), 1, 'reduced motion draws a static Sonar frame');
+    await desktop.waitForFunction(() => Array.from(document.querySelectorAll('[data-reveal]')).every((element) => element.classList.contains('is-visible')));
+
+    const toggle = mobile.locator('[data-nav-toggle]');
+    await toggle.focus();
+    await mobile.keyboard.press('Enter');
+    assert.equal(await toggle.getAttribute('aria-expanded'), 'true');
+    await mobile.keyboard.press('Escape');
+    assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
+    assert.equal(await mobile.evaluate(() => document.activeElement === document.querySelector('[data-nav-toggle]')), true, 'Escape restores focus to the mobile navigation control');
+
+    const locationBefore = await desktop.evaluate(() => location.href);
+    await desktop.locator('[data-dormant-cta]').focus();
+    await desktop.keyboard.press('Enter');
+    assert.equal(await desktop.evaluate(() => location.href), locationBefore, 'dormant Play CTA must not navigate');
+    assert.equal(await desktop.locator('[data-play-status]').isVisible(), true, 'dormant Play CTA exposes accessible feedback');
+    assert.deepEqual(consoleErrors, [], 'local enhancement scripts must not emit console errors');
+    assert.deepEqual(requestFailures, [], 'local enhancement scripts must not fail network requests');
+  } finally {
+    await desktop.close();
+    await mobile.close();
+    await reduced.close();
+    await browser.close();
+    await server.close();
+  }
+});
