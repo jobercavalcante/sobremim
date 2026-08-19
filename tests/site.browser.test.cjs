@@ -123,3 +123,107 @@ test('site contract is exposed by the real browser and local network only', asyn
     await server.close();
   }
 });
+
+test('visual design contract is resolved by Chromium and preserves static fallbacks', async () => {
+  const server = await startSiteServer();
+  const browser = await chromium.launch({ executablePath: browserExecutable(), headless: true });
+  const desktop = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  const mobile = await browser.newPage({ viewport: { width: 768, height: 1024 } });
+  const reduced = await browser.newPage({ viewport: { width: 1024, height: 768 }, reducedMotion: 'reduce' });
+  const noJavaScript = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1024, height: 768 } });
+  const staticPage = await noJavaScript.newPage();
+
+  try {
+    await Promise.all([desktop.goto(`${server.baseUrl}/`), mobile.goto(`${server.baseUrl}/`), reduced.goto(`${server.baseUrl}/`), staticPage.goto(`${server.baseUrl}/`)]);
+
+    const rootContract = await desktop.locator('html').evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        ink: style.getPropertyValue('--ink').trim(),
+        inkSoft: style.getPropertyValue('--ink-soft').trim(),
+        surface: style.getPropertyValue('--surface').trim(),
+        surface2: style.getPropertyValue('--surface-2').trim(),
+        electric: style.getPropertyValue('--electric').trim(),
+        cyan: style.getPropertyValue('--cyan').trim(),
+        cyanStrong: style.getPropertyValue('--cyan-strong').trim(),
+        text: style.getPropertyValue('--text').trim(),
+        muted: style.getPropertyValue('--muted').trim(),
+        dim: style.getPropertyValue('--dim').trim(),
+        overflowX: style.overflowX,
+        fontFamily: style.fontFamily,
+      };
+    });
+    assert.deepEqual(rootContract, {
+      ink: '#01091F', inkSoft: '#021653', surface: '#061D46', surface2: '#0A2855',
+      electric: '#1773F4', cyan: '#1AE3E7', cyanStrong: '#00BEC7', text: '#F2F5F7',
+      muted: '#ABC3D9', dim: '#7897B6', overflowX: 'clip', fontFamily: 'system-ui, sans-serif',
+    }, 'global palette, system typography and clipped horizontal overflow are design contracts');
+
+    await desktop.keyboard.press('Tab');
+    const focus = await desktop.locator('a[href="#content"]').evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { outlineWidth: style.outlineWidth, outlineStyle: style.outlineStyle, boxShadow: style.boxShadow };
+    });
+    assert.ok(Number.parseFloat(focus.outlineWidth) > 0 || focus.boxShadow !== 'none', 'keyboard focus must have a visible indicator');
+
+    await desktop.locator('html').evaluate((element) => element.classList.add('reveal-ready'));
+    const reveal = desktop.locator('[data-reveal]').first();
+    assert.equal(await reveal.isVisible(), true, 'content remains visible while enhancement is awaiting its visible state');
+    await reveal.evaluate((element) => element.classList.add('is-visible'));
+    assert.equal(await reveal.isVisible(), true, 'revealed content remains visible when JavaScript enhancement marks it visible');
+    assert.equal(await staticPage.locator('#process').isVisible(), true, 'content remains visible without JavaScript');
+    assert.equal(await staticPage.locator('[data-nav-panel]').isVisible(), true, 'navigation remains operable without JavaScript');
+
+    const reducedMotion = await reduced.locator('[data-reveal]').first().evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { duration: style.transitionDuration, animation: style.animationName };
+    });
+    assert.equal(reducedMotion.duration, '0s', 'reduced motion must remove reveal transitions');
+    assert.equal(reducedMotion.animation, 'none', 'reduced motion must remove animations');
+
+    const mobileContract = await mobile.locator('[data-sonar-field]').evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { display: style.display, backdropFilter: style.backdropFilter, transform: style.transform };
+    });
+    assert.equal(mobileContract.display, 'none', 'Sonar field must be disabled at 900px and below');
+    assert.equal(mobileContract.backdropFilter, 'none', 'mobile Sonar field must not activate backdrop blur');
+    assert.equal(mobileContract.transform, 'none', 'mobile Sonar field must not apply pointer parallax');
+  } finally {
+    await desktop.close();
+    await mobile.close();
+    await reduced.close();
+    await staticPage.close();
+    await noJavaScript.close();
+    await browser.close();
+    await server.close();
+  }
+});
+
+test('narrative layout remains contained and readable at supported viewports', async () => {
+  const server = await startSiteServer();
+  const browser = await chromium.launch({ executablePath: browserExecutable(), headless: true });
+  const viewports = [
+    { width: 360, height: 800 }, { width: 768, height: 1024 },
+    { width: 1024, height: 768 }, { width: 1440, height: 1000 },
+  ];
+
+  try {
+    for (const viewport of viewports) {
+      const page = await browser.newPage({ viewport });
+      await page.goto(`${server.baseUrl}/`);
+      const metrics = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+        bodyFontSize: Number.parseFloat(getComputedStyle(document.body).fontSize),
+        headingSize: Number.parseFloat(getComputedStyle(document.querySelector('h1')).fontSize),
+      }));
+      assert.ok(metrics.scrollWidth <= metrics.clientWidth, `${viewport.width}px layout must not horizontally overflow`);
+      assert.ok(metrics.bodyFontSize >= 16, `${viewport.width}px body text must remain readable`);
+      assert.ok(metrics.headingSize <= 96, `${viewport.width}px headline must remain at or below 6rem`);
+      await page.close();
+    }
+  } finally {
+    await browser.close();
+    await server.close();
+  }
+});
