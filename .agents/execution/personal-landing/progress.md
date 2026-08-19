@@ -47,4 +47,5 @@ Build and fully verify Jober Cavalcante's narrative personal landing page from t
 
 - 2026-08-19: user approved the recommended concept and delegated remaining decisions until final delivery.
 - 2026-08-19: design spec and implementation plan created; no site implementation started before approval.
-
+- 2026-08-19: Ruling: execute on `codex/personal-landing` in a project-local linked worktree — the root checkout contains user-owned untracked reference material and must remain stable; cost if wrong: a local merge back to `master` is required before handoff.
+- 2026-08-19: Ruling: browser-facing contracts use real Chromium behavior through the bundled Playwright runtime instead of source-text assertions — this follows the test-quality contract; cost if wrong: the test command depends on the Codex workspace runtime path being available.
