@@ -83,6 +83,7 @@ git commit -m "test: define contratos da landing pessoal"
 - Copy/optimize: `site/assets/projects/recanto-beija-flor/*`
 - Copy/optimize: `site/assets/projects/arteconectamente/*`
 - Modify: `site/assets/ASSET-SOURCES.md`
+- Modify: `tests/site.browser.test.cjs`
 
 **Interfaces:**
 
@@ -132,8 +133,8 @@ Expected: PASS with no skipped checks; the OG-dimension assertion is introduced 
 - [ ] **Step 8: Inspect the diff and commit**
 
 ```powershell
-git diff -- site/index.html site/assets
-git add -- site/index.html site/assets
+git diff -- site/index.html site/assets tests/site.browser.test.cjs
+git add -- site/index.html site/assets tests/site.browser.test.cjs
 git commit -m "feat: estrutura narrativa e cases do portfólio"
 ```
 
