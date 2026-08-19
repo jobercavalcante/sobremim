@@ -20,4 +20,8 @@ Foram priorizados logos próprios, previews e screenshots de interface. Não for
 
 Todos os caminhos acima são derivados de projetos locais de propriedade do usuário. Links públicos de perfil ou páginas externas, quando usados na landing, são destinos de navegação e não assets de runtime.
 
-As cópias desta tabela foram preservadas nos destinos indicados para manter a proveniência e as dimensões verificáveis. O símbolo vetorial complementar da marca foi redesenhado localmente em `brand/logo-mark.svg`; ele não substitui o PNG original nem declara uma nova origem de imagem.
+As cópias desta tabela foram preservadas nos destinos indicados como fallback e registro de proveniência. A partir delas, foram gerados localmente derivados WebP com Pillow 11.1.0, qualidade 82 e reamostragem Lanczos; cada variante mantém a proporção, não amplia a origem e é referenciada por `picture/source` com `srcset` e `sizes` no HTML.
+
+Derivados responsivos: `brand/logo-console.png` → `brand/jober-console-256w.webp`, `brand/jober-console-512w.webp`; `projects/streamnest/streamnest-social-preview.png` → `streamnest-library-640w.webp`, `streamnest-library-1200w.webp`; `projects/streamnest/icon.png` → `streamnest-icon-320w.webp`, `streamnest-icon-768w.webp`; `projects/sonar-promos/sonar-promos-social-preview.png` → `sonar-promos-overview-640w.webp`, `sonar-promos-overview-1200w.webp`; `sonar-dark.png`, `resumo-dark.png` e `feed-dark.png` → variantes `320w` e `620w` homônimas; `projects/recanto-beija-flor/logo.jpg` → `recanto-beija-flor-logo-256w.webp`, `recanto-beija-flor-logo-512w.webp`; `projects/arteconectamente/og-share.webp` → `arteconectamente-share-640w.webp`, `arteconectamente-share-1200w.webp`; `arte-mente-alma.png` → `arteconectamente-arte-375w.webp`, `arteconectamente-arte-750w.webp`.
+
+O símbolo vetorial complementar da marca foi redesenhado localmente em `brand/logo-mark.svg`; ele não substitui o PNG original nem declara uma nova origem de imagem.

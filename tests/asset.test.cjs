@@ -100,6 +100,28 @@ function expectedDimensions(value) {
 }
 
 const assets = parseManifest();
+const responsiveAssets = [
+  ['brand/jober-console-256w.webp', 'brand/logo-console.png', 512],
+  ['brand/jober-console-512w.webp', 'brand/logo-console.png', 512],
+  ['projects/streamnest/streamnest-library-640w.webp', 'projects/streamnest/streamnest-social-preview.png', 1200],
+  ['projects/streamnest/streamnest-library-1200w.webp', 'projects/streamnest/streamnest-social-preview.png', 1200],
+  ['projects/streamnest/streamnest-icon-320w.webp', 'projects/streamnest/icon.png', 1254],
+  ['projects/streamnest/streamnest-icon-768w.webp', 'projects/streamnest/icon.png', 1254],
+  ['projects/sonar-promos/sonar-promos-overview-640w.webp', 'projects/sonar-promos/sonar-promos-social-preview.png', 1200],
+  ['projects/sonar-promos/sonar-promos-overview-1200w.webp', 'projects/sonar-promos/sonar-promos-social-preview.png', 1200],
+  ['projects/sonar-promos/sonar-promos-alerts-320w.webp', 'projects/sonar-promos/sonar-dark.png', 620],
+  ['projects/sonar-promos/sonar-promos-alerts-620w.webp', 'projects/sonar-promos/sonar-dark.png', 620],
+  ['projects/sonar-promos/sonar-promos-summary-320w.webp', 'projects/sonar-promos/resumo-dark.png', 620],
+  ['projects/sonar-promos/sonar-promos-summary-620w.webp', 'projects/sonar-promos/resumo-dark.png', 620],
+  ['projects/sonar-promos/sonar-promos-feed-320w.webp', 'projects/sonar-promos/feed-dark.png', 620],
+  ['projects/sonar-promos/sonar-promos-feed-620w.webp', 'projects/sonar-promos/feed-dark.png', 620],
+  ['projects/recanto-beija-flor/recanto-beija-flor-logo-256w.webp', 'projects/recanto-beija-flor/logo.jpg', 512],
+  ['projects/recanto-beija-flor/recanto-beija-flor-logo-512w.webp', 'projects/recanto-beija-flor/logo.jpg', 512],
+  ['projects/arteconectamente/arteconectamente-share-640w.webp', 'projects/arteconectamente/og-share.webp', 1568],
+  ['projects/arteconectamente/arteconectamente-share-1200w.webp', 'projects/arteconectamente/og-share.webp', 1568],
+  ['projects/arteconectamente/arteconectamente-arte-375w.webp', 'projects/arteconectamente/arte-mente-alma.png', 750],
+  ['projects/arteconectamente/arteconectamente-arte-750w.webp', 'projects/arteconectamente/arte-mente-alma.png', 750],
+];
 
 test('asset manifest uses only approved local user-owned sources', () => {
   const expectedProjects = new Set(['Personal identity', 'StreamNest', 'Sonar Promos', 'Recanto Beija-Flor', 'ARTEconectaMENTE']);
@@ -127,6 +149,20 @@ for (const asset of assets) {
     const source = path.resolve(asset['Source path']);
     const dimensions = rasterDimensions(source);
     assert.deepEqual(dimensions, expectedDimensions(asset['Source dimensions']));
+  });
+}
+
+for (const [derivedPath, originalPath, originalWidth] of responsiveAssets) {
+  test(`responsive WebP derivative is valid and no wider than its source: ${derivedPath}`, () => {
+    const derived = path.join(destinationRoot, derivedPath);
+    const original = path.join(destinationRoot, originalPath);
+    assert.ok(fs.existsSync(original), `fallback original must remain available: ${originalPath}`);
+    assert.ok(fs.existsSync(derived), `responsive derivative is missing: ${derivedPath}`);
+    assert.equal(path.extname(derived), '.webp', `responsive derivative must use WebP: ${derivedPath}`);
+    const dimensions = rasterDimensions(derived);
+    assert.ok(dimensions.width > 0 && dimensions.height > 0, `${derivedPath} must have positive dimensions`);
+    assert.ok(dimensions.width <= originalWidth, `${derivedPath} must not upscale beyond ${originalPath}`);
+    assert.ok(dimensions.width <= rasterDimensions(original).width, `${derivedPath} must not be wider than its actual fallback`);
   });
 }
 
