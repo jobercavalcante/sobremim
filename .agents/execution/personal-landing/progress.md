@@ -17,7 +17,7 @@ Build and fully verify Jober Cavalcante's narrative personal landing page from t
 | ID | Deliverable | Owner role | Requested model/effort | Dependencies | State | Review | Checks |
 |---|---|---|---|---|---|---|---|
 | T0 | Investigation and approved design | coordinator | gpt-5.6-sol / medium | none | DONE | user approved | four-project read-only audit |
-| T1 | Test contracts and asset inventory | mechanical-executor | gpt-5.6-luna / xhigh | T0 | PLANNED | task-reviewer pending | `tests/run-tests.ps1` harness + expected RED contracts |
+| T1 | Test contracts and asset inventory | mechanical-executor | gpt-5.6-luna / xhigh | T0 | DONE | clean after fix round 1 | harness + 1/1 server regression; final-page RED handed to T2 |
 | T2 | Brand assets and semantic narrative | integration-executor | gpt-5.6-terra / medium | T1 | PLANNED | task-reviewer pending | site and asset contracts |
 | T3 | Dark narrative design system | integration-executor | gpt-5.6-terra / medium | T2 | PLANNED | task-reviewer pending | contracts + four viewport inspection |
 | T4 | SVG circuit engine | integration-executor | gpt-5.6-terra / medium | T3 | PLANNED | task-reviewer pending | `tests/run-tests.ps1 -TestFiles tests/circuit-path.test.cjs` |
@@ -52,3 +52,4 @@ Build and fully verify Jober Cavalcante's narrative personal landing page from t
 - 2026-08-19: implementation plan corrected before execution so DOM, network, keyboard, no-JS, reduced-motion and computed-style contracts run in real Chromium; pure functions and binary dimensions remain Node tests.
 - 2026-08-19: Ruling: use system font stacks instead of Space Grotesk/Manrope files — no local copies with a verifiable license were found, and the approved design explicitly allowed fallback; cost if wrong: typography will be less distinctive across operating systems.
 - 2026-08-19: browser preflight found workspace Playwright but no bundled browser image; verified local Chrome and Edge executables will be selected without downloads.
+- 2026-08-19: T1 committed the Playwright/static-server harness, provenance manifest and asset contracts; independent review found a symlink escape, fixed in `0d95537` and re-reviewed clean. Lazy-resource request completeness remains a deferred Minor for integrated QA.
