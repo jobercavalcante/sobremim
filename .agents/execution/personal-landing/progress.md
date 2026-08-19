@@ -22,8 +22,8 @@ Build and fully verify Jober Cavalcante's narrative personal landing page from t
 | T3 | Dark narrative design system | integration-executor | gpt-5.6-terra / medium | T2 | DONE | clean; 1 deferred Minor | 46/46 browser + asset checks, zero skips |
 | T4 | SVG circuit engine | integration-executor | gpt-5.6-terra / medium | T3 | DONE | clean after fix round 1 | 6/6 lifecycle + 46/46 browser/assets |
 | T5 | Progressive enhancement and Sonar field | integration-executor | gpt-5.6-terra / medium | T4 | DONE | clean after fix round 1 | 56/56 complete suite, zero skips |
-| T6 | OG and crawler assets | mechanical-executor | gpt-5.6-luna / xhigh | T3 | IN PROGRESS | task-reviewer pending | OG dimension and asset contracts |
-| T7 | Integrated QA and evidence | integration-executor | gpt-5.6-terra / medium | T2-T6 | PLANNED | task-reviewer pending | static, browser, mobile, a11y, SEO, performance |
+| T6 | OG and crawler assets | mechanical-executor | gpt-5.6-luna / xhigh | T3 | DONE | clean | asset 44/44 + complete suite 57/57 |
+| T7 | Integrated QA and evidence | integration-executor | gpt-5.6-terra / medium | T2-T6 | IN PROGRESS | task-reviewer pending | static, browser, mobile, a11y, SEO, performance |
 | T8 | Complete change-set review | final-reviewer | gpt-5.6-sol / medium | T7 | PLANNED | pending | full evidence bundle |
 
 ## Decisions
@@ -62,3 +62,4 @@ Build and fully verify Jober Cavalcante's narrative personal landing page from t
 - 2026-08-19: T4 delivered the opt-in UMD circuit controller in `76fa44c`. Review-required lifecycle coverage was added in `ee591cb` for readiness, passive scroll/RAF coalescing, resize debounce, hidden tabs, reduced motion, modern/legacy media queries and teardown; fresh re-review was clean.
 - 2026-08-19: Ruling: Task 5 owns real-browser interaction contracts in addition to pure Sonar tests — keyboard navigation, readiness gates, controller mounting and desktop/mobile/reduced-motion runtime behavior require executable regression coverage; cost if wrong: `tests/site.browser.test.cjs` is an additional reviewed Task 5 surface.
 - 2026-08-19: T5 delivered progressive nav/reveals/active state, circuit orchestration, honest dormant feedback and bounded Sonar in `467d608`. Review reproduced a desktop→mobile Canvas/RAF leak; `1a30ab0` added controller stop, responsive unmount/remount and unit plus Chromium regression coverage. Fresh re-review was clean at 56/56 tests.
+- 2026-08-19: T6 delivered a deterministic 1200×630 HTML-rendered OG image, local composition source and crawlable `robots.txt` in `7ea5ad7`. Independent review validated pixels, local-only dependencies, relative metadata and the deliberate absence of Sitemap; 57/57 full-suite checks passed.
