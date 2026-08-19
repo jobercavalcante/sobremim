@@ -56,6 +56,7 @@
 
     function isReduced() { return media.matches; }
     function animationCount() { return profile({ width: windowRef.innerWidth, coarse: coarseMedia.matches, hardwareConcurrency: windowRef.navigator.hardwareConcurrency, reducedMotion: isReduced() }).signals; }
+    function canAnimate() { return animationCount() > 0; }
 
     function resize() {
       var rect = container.getBoundingClientRect();
@@ -75,6 +76,8 @@
         return signal;
       });
       draw(0);
+      if (count === 0) stop();
+      else if (visible) start();
     }
 
     function draw(time) {
@@ -105,7 +108,7 @@
 
     function tick(time) {
       frame = null;
-      if (destroyed || !visible || documentRef.visibilityState === 'hidden' || isReduced()) return;
+      if (destroyed || !visible || documentRef.visibilityState === 'hidden' || !canAnimate()) return;
       var elapsed = lastTime ? Math.min((time - lastTime) / 1000, .1) : 0;
       lastTime = time;
       signals.forEach(function (signal, index) {
@@ -122,7 +125,7 @@
     }
 
     function start() {
-      if (destroyed || !visible || isReduced() || documentRef.visibilityState === 'hidden' || frame !== null) return;
+      if (destroyed || !visible || !canAnimate() || documentRef.visibilityState === 'hidden' || frame !== null) return;
       frame = windowRef.requestAnimationFrame(tick);
     }
 

@@ -63,8 +63,23 @@
   }
 
   if (windowRef.JoberCircuit && typeof windowRef.JoberCircuit.mount === 'function') { var circuit = windowRef.JoberCircuit.mount(); cleanups.push(function () { circuit.destroy(); }); }
-  if (windowRef.JoberSonar && typeof windowRef.JoberSonar.mount === 'function' && windowRef.innerWidth > 900) {
-    Array.prototype.forEach.call(documentRef.querySelectorAll('[data-sonar-field]'), function (field) { var sonar = windowRef.JoberSonar.mount(field); cleanups.push(function () { sonar.destroy(); }); });
+  if (windowRef.JoberSonar && typeof windowRef.JoberSonar.mount === 'function') {
+    var desktopSonar = windowRef.matchMedia('(min-width: 901px)');
+    var sonarControllers = [];
+    function unmountSonar() { sonarControllers.splice(0).forEach(function (controller) { controller.destroy(); }); }
+    function syncSonar() {
+      unmountSonar();
+      if (desktopSonar.matches) Array.prototype.forEach.call(documentRef.querySelectorAll('[data-sonar-field]'), function (field) { sonarControllers.push(windowRef.JoberSonar.mount(field)); });
+    }
+    function onSonarBreakpointChange() { syncSonar(); }
+    syncSonar();
+    if (typeof desktopSonar.addEventListener === 'function') desktopSonar.addEventListener('change', onSonarBreakpointChange);
+    else if (typeof desktopSonar.addListener === 'function') desktopSonar.addListener(onSonarBreakpointChange);
+    cleanups.push(function () {
+      if (typeof desktopSonar.removeEventListener === 'function') desktopSonar.removeEventListener('change', onSonarBreakpointChange);
+      else if (typeof desktopSonar.removeListener === 'function') desktopSonar.removeListener(onSonarBreakpointChange);
+      unmountSonar();
+    });
   }
   windowRef.JoberPersonalLanding = { destroy: destroy };
 }());

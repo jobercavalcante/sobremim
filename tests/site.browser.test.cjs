@@ -247,6 +247,10 @@ test('progressive interaction controllers mount safely and preserve keyboard beh
     await desktop.waitForFunction(() => document.documentElement.classList.contains('nav-ready') && document.documentElement.classList.contains('reveal-ready') && document.documentElement.classList.contains('circuit-ready'));
     await desktop.waitForFunction(() => document.querySelectorAll('[data-nav-panel] a[aria-current="location"]').length === 1);
     assert.equal(await desktop.locator('[data-sonar-field] canvas').count(), 1, 'eligible desktop mounts one Sonar canvas');
+    await desktop.setViewportSize({ width: 768, height: 900 });
+    await desktop.waitForFunction(() => document.querySelectorAll('[data-sonar-field] canvas').length === 0);
+    await desktop.setViewportSize({ width: 1440, height: 900 });
+    await desktop.waitForFunction(() => document.querySelectorAll('[data-sonar-field] canvas').length === 1);
     assert.equal(await mobile.locator('[data-sonar-field] canvas').count(), 0, 'mobile must not mount a Sonar canvas');
     assert.equal(await reduced.locator('[data-sonar-field] canvas').count(), 1, 'reduced motion draws a static Sonar frame');
     await desktop.waitForFunction(() => Array.from(document.querySelectorAll('[data-reveal]')).every((element) => element.classList.contains('is-visible')));
