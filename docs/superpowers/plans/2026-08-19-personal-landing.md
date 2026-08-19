@@ -4,9 +4,9 @@
 
 **Goal:** Build a complete, static, narrative personal landing page for Jober Cavalcante that connects his professional identity, decision process, trajectory, specializations, and four verified portfolio cases.
 
-**Architecture:** A semantic HTML document remains fully useful without JavaScript. CSS owns the dark layered design system and responsive case environments; three focused vanilla JavaScript files own general progressive enhancement, the SVG circuit, and the bounded Sonar signal field. Node built-in tests validate pure JavaScript and binary assets; browser-facing contracts exercise the served page in a real Chromium instance supplied by the workspace runtime, without adding project dependencies.
+**Architecture:** A semantic HTML document remains fully useful without JavaScript. CSS owns the dark layered design system and responsive case environments; three focused vanilla JavaScript files own general progressive enhancement, the SVG circuit, and the bounded Sonar signal field. Node built-in tests validate pure JavaScript and binary assets; browser-facing contracts exercise the served page through workspace-provided Playwright and a verified local Chrome/Edge executable, without adding project dependencies.
 
-**Tech Stack:** HTML5, CSS3, vanilla JavaScript, SVG, Canvas 2D, Node.js built-in `node:test`, PowerShell, and the workspace-provided Playwright/Chromium runtime for behavioral tests and screenshots.
+**Tech Stack:** HTML5, CSS3, vanilla JavaScript, SVG, Canvas 2D, Node.js built-in `node:test`, PowerShell, workspace-provided Playwright, and local Chrome/Edge for behavioral tests and screenshots.
 
 **Spec:** `docs/superpowers/specs/2026-08-19-personal-landing-design.md`
 
@@ -142,8 +142,6 @@ git commit -m "feat: estrutura narrativa e cases do portfólio"
 **Files:**
 
 - Create: `site/css/styles.css`
-- Copy: `site/assets/fonts/space-grotesk-var.woff2`
-- Copy: `site/assets/fonts/manrope-var.woff2`
 - Modify: `site/assets/ASSET-SOURCES.md`
 - Modify: `tests/site.browser.test.cjs`
 
@@ -154,7 +152,7 @@ git commit -m "feat: estrutura narrativa e cases do portfólio"
 
 - [ ] **Step 1: Add failing visual behavior contracts**
 
-In Chromium, inspect resolved custom properties and computed styles instead of matching CSS source text. Assert the exact palette values, clipped horizontal overflow, successful local font requests, a visible keyboard focus indicator, revealed content with JavaScript, visible content without JavaScript, zero-duration/non-animated states under `prefers-reduced-motion`, and at 900 px or below a hidden Sonar canvas with no active backdrop filter, parallax or pointer transform.
+In Chromium, inspect resolved custom properties and computed styles instead of matching CSS source text. Assert the exact palette values, clipped horizontal overflow, the effective system font stacks with zero external font requests, a visible keyboard focus indicator, revealed content with JavaScript, visible content without JavaScript, zero-duration/non-animated states under `prefers-reduced-motion`, and at 900 px or below a hidden Sonar canvas with no active backdrop filter, parallax or pointer transform.
 
 - [ ] **Step 2: Run the CSS contract and confirm failure**
 
@@ -162,9 +160,9 @@ Run: `.\tests\run-tests.ps1 -TestFiles tests/site.browser.test.cjs`
 
 Expected: FAIL because `site/css/styles.css` is absent.
 
-- [ ] **Step 3: Implement tokens, fonts and global layout**
+- [ ] **Step 3: Implement tokens, system font stacks and global layout**
 
-Define all approved palette, typography, spacing, radius, border and easing tokens. Use four navy layers and short radial illumination. Implement fluid typography with `clamp()`, a 1140 px container and section spacing from 4 to 8 rem.
+Define all approved palette, typography, spacing, radius, border and easing tokens. Use a system-first geometric heading stack and readable UI/body stack because no locally licensed Space Grotesk or Manrope files were found; never request a web font. Use four navy layers and short radial illumination. Implement fluid typography with `clamp()`, a 1140 px container and section spacing from 4 to 8 rem.
 
 - [ ] **Step 4: Implement navigation, hero and process components**
 
@@ -191,7 +189,7 @@ Then render at 360 × 800, 768 × 1024, 1024 × 768 and 1440 × 1000. Verify no 
 - [ ] **Step 9: Commit the visual system**
 
 ```powershell
-git add -- site/css/styles.css site/assets/fonts site/assets/ASSET-SOURCES.md tests/site.browser.test.cjs
+git add -- site/css/styles.css site/assets/ASSET-SOURCES.md tests/site.browser.test.cjs
 git commit -m "feat: aplica identidade visual narrativa"
 ```
 
