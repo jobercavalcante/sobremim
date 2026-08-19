@@ -261,6 +261,7 @@ git commit -m "feat: conecta narrativa ao progresso do scroll"
 - Create: `site/js/sonar-field.js`
 - Create: `tests/sonar-field.test.cjs`
 - Modify: `site/index.html`
+- Modify: `tests/site.browser.test.cjs`
 
 **Interfaces:**
 
@@ -277,32 +278,36 @@ Run: `.\tests\run-tests.ps1 -TestFiles tests/sonar-field.test.cjs`
 
 Expected: FAIL because the module is absent.
 
-- [ ] **Step 3: Implement main progressive enhancement**
+- [ ] **Step 3: Add failing browser interaction contracts**
+
+In real Chromium at desktop and mobile widths, assert that the local scripts mount without console or network errors; readiness classes appear only with their handlers/controllers; the mobile navigation toggles `aria-expanded`, closes on Escape and restores focus; reveals reach a visible state; the circuit controller mounts; the dormant Play action provides non-navigating feedback; and the Sonar canvas is mounted only on eligible desktop while mobile and reduced motion remain static. Keep the existing JavaScript-disabled anchor and contact checks.
+
+- [ ] **Step 4: Implement main progressive enhancement**
 
 Implement mobile nav open/close, Escape handling and focus restoration; `IntersectionObserver` reveals with a two-second fallback; active nav state; external-link safety; dormant Play feedback; and mounting of circuit/Sonar APIs only when available. Add `.nav-ready` only after navigation handlers are installed and `.reveal-ready` only after the observer and its fallback are installed. Remove readiness classes during teardown when applicable. Every essential anchor remains valid without this file.
 
-- [ ] **Step 4: Implement bounded Sonar Canvas**
+- [ ] **Step 5: Implement bounded Sonar Canvas**
 
 Use deterministic seeded signals moving across the case canvas. One signal receives the gold match state when it enters a scan band. Keep population bounded by `profile()`, cap DPR, pause on `visibilitychange`, observe container resize and stop when the section is offscreen. Reduced motion draws one static frame.
 
-- [ ] **Step 5: Prevent continuous work outside its section**
+- [ ] **Step 6: Prevent continuous work outside its section**
 
 Use `IntersectionObserver` to start and stop the Canvas. Cancel animation frames in `destroy()` and when hidden. Do not expose pointer interaction on coarse devices.
 
-- [ ] **Step 6: Run all automated tests**
+- [ ] **Step 7: Run all automated tests**
 
 Run: `.\tests\run-tests.ps1`
 
 Expected: PASS.
 
-- [ ] **Step 7: Perform keyboard and no-js checks**
+- [ ] **Step 8: Perform keyboard and no-js checks**
 
 With JavaScript disabled, follow every nav anchor and both contact links. With JavaScript enabled, open and close mobile navigation using keyboard only, press Escape, tab through all interactive elements and verify focus never disappears.
 
-- [ ] **Step 8: Commit interactions**
+- [ ] **Step 9: Commit interactions**
 
 ```powershell
-git add -- site/js site/index.html tests/sonar-field.test.cjs
+git add -- site/js site/index.html tests/sonar-field.test.cjs tests/site.browser.test.cjs
 git commit -m "feat: adiciona interações progressivas e sonar adaptativo"
 ```
 
