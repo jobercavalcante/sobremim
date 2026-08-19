@@ -361,6 +361,10 @@ git commit -m "feat: adiciona metadados e imagem de compartilhamento"
 **Files:**
 
 - Create: `docs/qa/personal-landing-qa.md`
+- Create: `docs/qa/screenshots/personal-landing-360x800.png`
+- Create: `docs/qa/screenshots/personal-landing-768x1024.png`
+- Create: `docs/qa/screenshots/personal-landing-1024x768.png`
+- Create: `docs/qa/screenshots/personal-landing-1440x1000.png`
 - Modify only when a verified defect is found: `site/**`, `tests/**`
 - Modify: `.agents/execution/personal-landing/progress.md`
 
@@ -393,9 +397,9 @@ Emulate reduced motion and confirm no pulsing, scrolling circuit animation, Canv
 
 Run Lighthouse locally when the installed browser/runtime supports it. Target no serious accessibility issue, no broken SEO metadata, and performance without a red-category regression. If Lighthouse is unavailable, record the exact missing executable and complete manual keyboard, headings, landmarks, contrast and asset-size checks.
 
-- [ ] **Step 6: Fix only evidence-backed defects and rerun affected checks**
+- [ ] **Step 6: Close deferred coverage and fix only evidence-backed defects**
 
-For each fix, record file, symptom, evidence and retest in the QA report. Do not add new visual concepts during QA.
+Close the three deferred review items: pin the exact approved H1 text; scroll through the complete page before asserting the full local request set; and assert computed default, pending and active states for `.reveal-ready`, `.nav-ready` and `.circuit-ready`. For each coverage addition or defect fix, record file, symptom/evidence and retest in the QA report. Do not add new visual concepts during QA.
 
 - [ ] **Step 7: Inspect final diff and repository status**
 
@@ -406,7 +410,7 @@ Confirm only the site, tests, spec, plan, QA and execution ledger are changed or
 - [ ] **Step 8: Commit QA evidence and verified fixes**
 
 ```powershell
-git add -- docs/qa/personal-landing-qa.md .agents/execution/personal-landing/progress.md site tests
+git add -- docs/qa/personal-landing-qa.md docs/qa/screenshots .agents/execution/personal-landing/progress.md site tests
 git commit -m "test: valida experiência final da landing"
 ```
 
