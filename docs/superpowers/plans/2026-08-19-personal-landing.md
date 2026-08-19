@@ -109,7 +109,7 @@ Use explicit source and destination paths from the manifest. Optimize copies in 
 
 - [ ] **Step 5: Implement the semantic HTML**
 
-Use `lang="pt-BR"`, `class="no-js"`, a small inline class replacement, skip link, fixed navigation, hero, process nodes, continuity/invention bifurcation, four editorial case articles, three systems contexts, condensed trajectory, AI workbench, contact and footer. Copy must remain within the factual boundaries in the spec.
+Use `lang="pt-BR"`, `class="no-js"`, a small inline class replacement, skip link, fixed navigation, hero, process nodes, continuity/invention bifurcation, four editorial case articles, three systems contexts, condensed trajectory, AI workbench, contact and footer. Copy must remain within the factual boundaries in the spec. Do not reference CSS or JavaScript files owned by later tasks before those files exist; Tasks 3–5 add their own local references with their implementations.
 
 ```html
 <article class="case case--sonar" id="sonar-promos" data-case-theme="sonar">
@@ -142,6 +142,7 @@ git commit -m "feat: estrutura narrativa e cases do portfólio"
 **Files:**
 
 - Create: `site/css/styles.css`
+- Modify: `site/index.html`
 - Modify: `site/assets/ASSET-SOURCES.md`
 - Modify: `tests/site.browser.test.cjs`
 
@@ -162,7 +163,7 @@ Expected: FAIL because `site/css/styles.css` is absent.
 
 - [ ] **Step 3: Implement tokens, system font stacks and global layout**
 
-Define all approved palette, typography, spacing, radius, border and easing tokens. Use a system-first geometric heading stack and readable UI/body stack because no locally licensed Space Grotesk or Manrope files were found; never request a web font. Use four navy layers and short radial illumination. Implement fluid typography with `clamp()`, a 1140 px container and section spacing from 4 to 8 rem.
+Link the new local stylesheet from `site/index.html`. Define all approved palette, typography, spacing, radius, border and easing tokens. Use a system-first geometric heading stack and readable UI/body stack because no locally licensed Space Grotesk or Manrope files were found; never request a web font. Use four navy layers and short radial illumination. Implement fluid typography with `clamp()`, a 1140 px container and section spacing from 4 to 8 rem.
 
 - [ ] **Step 4: Implement navigation, hero and process components**
 
@@ -189,7 +190,7 @@ Then render at 360 × 800, 768 × 1024, 1024 × 768 and 1440 × 1000. Verify no 
 - [ ] **Step 9: Commit the visual system**
 
 ```powershell
-git add -- site/css/styles.css site/assets/ASSET-SOURCES.md tests/site.browser.test.cjs
+git add -- site/css/styles.css site/index.html site/assets/ASSET-SOURCES.md tests/site.browser.test.cjs
 git commit -m "feat: aplica identidade visual narrativa"
 ```
 
