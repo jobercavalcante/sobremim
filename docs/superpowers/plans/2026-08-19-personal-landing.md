@@ -150,7 +150,7 @@ git commit -m "feat: estrutura narrativa e cases do portfólio"
 **Interfaces:**
 
 - Consumes: HTML classes and data hooks from Task 2.
-- Produces: tokens, layout, component, case-theme and breakpoint contracts; CSS custom properties `--scroll-progress`, `--circuit-progress`, `--pointer-x`, `--pointer-y`; state classes `.is-visible`, `.is-current`, `.nav-open`, `.is-static`.
+- Produces: tokens, layout, component, case-theme and breakpoint contracts; CSS custom properties `--scroll-progress`, `--circuit-progress`, `--pointer-x`, `--pointer-y`; state classes `.is-visible`, `.is-current`, `.nav-open`, `.is-static`; enhancement gates `.reveal-ready`, `.nav-ready` and `.circuit-ready`.
 
 - [ ] **Step 1: Add failing visual behavior contracts**
 
@@ -180,7 +180,7 @@ Use editorial columns and separators instead of a generic card grid. Connect sta
 
 - [ ] **Step 7: Implement responsive, no-js and reduced-motion states**
 
-At 900 px, remove Canvas, blur and pointer-only transforms; convert the circuit to a vertical guide; turn the HUD into a top progress bar; keep navigation operable. At 600 px, reduce ghost words and media height. `.no-js` must expose all content and retain anchor navigation.
+At 900 px, remove Canvas, blur and pointer-only transforms; convert the circuit to a vertical guide; turn the HUD into a top progress bar; keep navigation operable. At 600 px, reduce ghost words and media height. Content, navigation and the static circuit are visible and operable by default. Hide or animate them only beneath `.reveal-ready`, `.nav-ready` and `.circuit-ready`, which later tasks add after their controllers are mounted. `.no-js` must expose all content and retain anchor navigation; `.js` alone is never an enhancement-readiness signal.
 
 - [ ] **Step 8: Run tests and inspect four viewport sizes**
 
@@ -234,7 +234,7 @@ Return deterministic values for clamps, document progress and stage thresholds. 
 
 - [ ] **Step 4: Implement the browser controller**
 
-Measure the SVG path once after load and on debounced resize. Update `strokeDashoffset`, `--scroll-progress`, progress text and `.is-current` stage in a passive scroll listener throttled through one animation frame. On reduced motion, draw the final static path and avoid registering the scroll animation.
+Measure the SVG path once after load and on debounced resize. Update `strokeDashoffset`, `--scroll-progress`, progress text and `.is-current` stage in a passive scroll listener throttled through one animation frame. Add `.circuit-ready` only after the controller has mounted and established a valid static or animated state; remove it in `destroy()`. On reduced motion, draw the final static path and avoid registering the scroll animation.
 
 - [ ] **Step 5: Add lifecycle safety**
 
@@ -279,7 +279,7 @@ Expected: FAIL because the module is absent.
 
 - [ ] **Step 3: Implement main progressive enhancement**
 
-Implement mobile nav open/close, Escape handling and focus restoration; `IntersectionObserver` reveals with a two-second fallback; active nav state; external-link safety; dormant Play feedback; and mounting of circuit/Sonar APIs only when available. Every essential anchor remains valid without this file.
+Implement mobile nav open/close, Escape handling and focus restoration; `IntersectionObserver` reveals with a two-second fallback; active nav state; external-link safety; dormant Play feedback; and mounting of circuit/Sonar APIs only when available. Add `.nav-ready` only after navigation handlers are installed and `.reveal-ready` only after the observer and its fallback are installed. Remove readiness classes during teardown when applicable. Every essential anchor remains valid without this file.
 
 - [ ] **Step 4: Implement bounded Sonar Canvas**
 
