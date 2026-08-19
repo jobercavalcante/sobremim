@@ -52,6 +52,32 @@ test('site contract is exposed by the real browser and local network only', asyn
     assert.equal(await main.count(), 1, 'main#content must be present exactly once');
     assert.ok(await main.isVisible(), 'main#content must be visible');
 
+    for (const selector of ['nav', 'main', 'article', 'aside', 'footer']) {
+      assert.ok(await page.locator(selector).count() > 0, `semantic ${selector} element is required`);
+    }
+    for (const id of ['hero', 'process', 'work', 'systems', 'journey', 'ai-workbench', 'contact']) {
+      assert.equal(await page.locator(`#${id}`).count(), 1, `section #${id} must be stable and unique`);
+    }
+    for (const id of ['sonar-promos', 'streamnest', 'recanto-beija-flor', 'arteconectamente']) {
+      assert.equal(await page.locator(`article#${id}`).count(), 1, `case article #${id} must be stable and unique`);
+    }
+    for (const hook of ['data-reveal', 'data-circuit-stage', 'data-case-theme', 'data-nav-toggle', 'data-nav-panel', 'data-sonar-field', 'data-circuit-path', 'data-scroll-progress']) {
+      assert.ok(await page.locator(`[${hook}]`).count() > 0, `${hook} hook is required for the enhancement layer`);
+    }
+    assert.equal(await page.locator('article#streamnest a[aria-disabled="true"]').count(), 1, 'StreamNest must have one dormant Play CTA');
+    assert.equal(await page.locator('article#streamnest a[aria-disabled="true"]').getAttribute('href'), null, 'dormant StreamNest Play CTA must not navigate');
+
+    const rasterImages = page.locator('img[src$=".png"], img[src$=".jpg"], img[src$=".jpeg"], img[src$=".webp"]');
+    assert.ok(await rasterImages.count() > 0, 'portfolio must use local raster evidence');
+    for (let index = 0; index < await rasterImages.count(); index += 1) {
+      const image = rasterImages.nth(index);
+      assert.ok(await image.getAttribute('width'), 'raster images need an explicit width');
+      assert.ok(await image.getAttribute('height'), 'raster images need an explicit height');
+      const alt = await image.getAttribute('alt');
+      assert.ok(alt && alt.trim().length > 4, 'raster images need meaningful alternative text');
+    }
+    assert.equal((await page.content()).includes('Daniiiii'), false, 'internal repository name must not leak into public copy');
+
     const skipLink = page.locator('a[href="#content"]').first();
     assert.equal(await skipLink.count(), 1, 'a skip link targeting #content is required');
     await page.keyboard.press('Tab');

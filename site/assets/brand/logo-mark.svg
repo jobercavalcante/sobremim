@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Marca de Jober Cavalcante</title>
+  <desc id="desc">Um smartphone aberto, com símbolos de código e conexões de circuito em azul e ciano.</desc>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M90 96h142c20 0 36 16 36 36v171c0 20 16 36 36 36h118" stroke="#1773F4" stroke-width="25"/>
+    <path d="M90 96v143m0 0h75m-75 0v80c0 20 16 36 36 36h58" stroke="#1AE3E7" stroke-width="18"/>
+    <path d="M304 339v67c0 20 16 36 36 36h76" stroke="#F2F5F7" stroke-width="18"/>
+    <path d="M248 180h85c18 0 33 15 33 33v105c0 18-15 33-33 33h-85c-18 0-33-15-33-33V213c0-18 15-33 33-33Z" stroke="#F2F5F7" stroke-width="16"/>
+    <path d="m265 247-22 19 22 19m52-38 22 19-22 19" stroke="#1AE3E7" stroke-width="14"/>
+  </g>
+  <circle cx="90" cy="96" r="18" fill="#F2F5F7"/>
+  <circle cx="90" cy="239" r="18" fill="#1773F4"/>
+  <circle cx="416" cy="442" r="18" fill="#1AE3E7"/>
+</svg>

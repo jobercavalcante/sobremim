@@ -19,3 +19,5 @@ Foram priorizados logos próprios, previews e screenshots de interface. Não for
 | ARTEconectaMENTE | E:\projetos\Daniiiii\site\assets\curadoria\arte-mente-alma.png | projects/arteconectamente/arte-mente-alma.png | Elemento visual editorial do case | Projeto do usuário; arte própria do projeto; sem pessoa identificável ou terceiro | 750×750 |
 
 Todos os caminhos acima são derivados de projetos locais de propriedade do usuário. Links públicos de perfil ou páginas externas, quando usados na landing, são destinos de navegação e não assets de runtime.
+
+As cópias desta tabela foram preservadas nos destinos indicados para manter a proveniência e as dimensões verificáveis. O símbolo vetorial complementar da marca foi redesenhado localmente em `brand/logo-mark.svg`; ele não substitui o PNG original nem declara uma nova origem de imagem.
