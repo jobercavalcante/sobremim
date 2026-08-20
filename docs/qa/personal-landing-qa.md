@@ -41,12 +41,14 @@ Ambiente: Chromium local (Google Chrome), Playwright do runtime Codex, servidor 
 
 As capturas são full-page, após rolagem incremental que carrega os assets lazy, confirma `complete && naturalWidth > 0`, aguarda `decode()` e torna todas as revelações visíveis. Para evitar artefatos conhecidos da captura full-page de Chromium com elementos `sticky`/`fixed`, a sessão de captura neutraliza somente a posição desses elementos; o conteúdo, CSS visual, assets, comportamento lazy e viewport são os entregues.
 
+Reprodução: execute `.\tests\capture-qa.ps1` a partir da raiz do projeto. O capturador versionado usa o mesmo Chromium e runtime da suíte, cobre os quatro viewports, ativa `prefers-reduced-motion` e encerra os controladores temporais somente depois de carregar e decodificar o conteúdo, congelando o quadro capturado. O comportamento completo dos controladores continua coberto pelos testes de navegador.
+
 | Viewport | Arquivo | Tamanho |
 |---|---|---:|
-| 360×800 | `screenshots/personal-landing-360x800.png` | 2.309.329 bytes |
-| 768×1024 | `screenshots/personal-landing-768x1024.png` | 4.124.557 bytes |
-| 1024×768 | `screenshots/personal-landing-1024x768.png` | 1.902.727 bytes |
-| 1440×1000 | `screenshots/personal-landing-1440x1000.png` | 2.270.682 bytes |
+| 360×800 | `screenshots/personal-landing-360x800.png` | 1.664.783 bytes |
+| 768×1024 | `screenshots/personal-landing-768x1024.png` | 2.915.973 bytes |
+| 1024×768 | `screenshots/personal-landing-1024x768.png` | 1.556.841 bytes |
+| 1440×1000 | `screenshots/personal-landing-1440x1000.png` | 1.767.311 bytes |
 
 Inspeção visual concluída nas quatro imagens: composição legível, CTA secundário presente, CTA StreamNest compacto em desktop, imagens carregadas e nenhum transbordamento horizontal. O rail lateral completo permanece visível em 1440px; em 1024px seu rótulo é ocultado, mantendo o progresso sem sobrepor o H1.
 
