@@ -160,6 +160,21 @@ main { position: relative; z-index: 1; }
   filter: drop-shadow(0 0 10px rgba(26, 227, 231, .9));
 }
 
+/* pulso final: o sinal viaja até o conector */
+#trace .trace-pulse {
+  fill: #d8fdff;
+  filter: drop-shadow(0 0 12px rgba(26, 227, 231, 1));
+}
+
+/* circuito fechado: traço completo ganha brilho máximo */
+#trace.is-complete .trace-glow {
+  filter: drop-shadow(0 0 11px rgba(26, 227, 231, .95));
+}
+
+body.circuit-closed #trace .trace-node.is-lit {
+  filter: drop-shadow(0 0 10px rgba(26, 227, 231, .9));
+}
+
 /* ---------- átomos ---------- */
 
 .kicker {
@@ -297,8 +312,9 @@ section.is-lit .kicker__pad { background: var(--accent); }
 
 .nav-links a:hover { color: var(--text); }
 
-/* especificidade maior que .nav-links a: texto escuro sobre ciano */
+/* especificidade maior que .nav-links a: texto escuro sobre ciano + padding do botão */
 .nav-links a.btn--primary { color: var(--ink); }
+.nav-links a.btn { padding: .55rem 1.1rem; }
 
 .nav-toggle {
   display: none;
@@ -825,7 +841,7 @@ html.js [data-reveal].is-visible { opacity: 1; transform: none; }
   }
   html.js [data-reveal] { opacity: 1 !important; transform: none !important; }
   .board-canvas { display: none; }
-  #trace .trace-glow, #trace .trace-head { display: none; }
+  #trace .trace-glow, #trace .trace-head, #trace .trace-pulse { display: none; }
   body.surge #trace .trace-node.is-lit { animation: none; }
   #trace .trace-path { opacity: .35; stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
 }
@@ -859,6 +875,8 @@ html.js [data-reveal].is-visible { opacity: 1; transform: none; }
   }
 
   .nav-links a { padding: .8rem 0; width: 100%; }
+
+  .nav-links a.btn { padding: .8rem 1.2rem; width: auto; }
 
   .hero__grid { grid-template-columns: 1fr; }
 
