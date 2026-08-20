@@ -24,7 +24,7 @@ Build and fully verify Jober Cavalcante's narrative personal landing page from t
 | T5 | Progressive enhancement and Sonar field | integration-executor | gpt-5.6-terra / medium | T4 | DONE | clean after fix round 1 | 56/56 complete suite, zero skips |
 | T6 | OG and crawler assets | mechanical-executor | gpt-5.6-luna / xhigh | T3 | DONE | clean | asset 44/44 + complete suite 57/57 |
 | T7 | Integrated QA and evidence | integration-executor | gpt-5.6-terra / medium | T2-T6 | DONE | clean after fix round 2 | 58/58 full suite; browser 4/4, full-scroll lazy network, reproducible visual evidence |
-| T8 | Complete change-set review | final-reviewer | gpt-5.6-sol / medium | T7 | IN PROGRESS | pending | full evidence bundle |
+| T8 | Complete change-set review | final-reviewer | gpt-5.6-sol / medium | T7 | DONE | approved | 28-commit full diff; 58/58 suite; four deterministic QA hashes |
 
 ## Decisions
 
@@ -67,3 +67,4 @@ Build and fully verify Jober Cavalcante's narrative personal landing page from t
 - 2026-08-20: T7 task review reproduced the 57/57 suite and requested one Minor fix: version the previously ignored capture procedure. `tests/capture-qa.cjs` and `tests/capture-qa.ps1` now regenerate all four screenshots after real lazy loading and decode; consecutive runs produced identical SHA-256 hashes. The documented command and refreshed artifacts are ready for re-review.
 - 2026-08-20: QA reproducibility fix adds versioned `docs/qa/screenshots/sha256.json`, a static test that pins exactly the four tracked PNGs, and `tests/capture-qa.ps1 -Verify`. Verify regenerates captures only in memory and checks both regenerated and tracked SHA-256 values without rewriting artifacts. Focused manifest test, in-memory verification and the complete suite pass 58/58.
 - 2026-08-20: T7 independent re-review approved the complete `c237693..b36c52f` range after reproducing all four manifest hashes in memory, confirming a clean worktree after verification and rerunning the 58/58 suite with zero failures or skips.
+- 2026-08-20: Independent final review approved the complete `456ff68..38544f6` change set after reconciling worktree/base/HEAD/package, reproducing the 58/58 suite and four deterministic QA hashes, and completing visual, factual and security sweeps with no actionable findings.
