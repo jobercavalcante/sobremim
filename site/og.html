@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Jober Cavalcante — O problema vem antes da tecnologia.</title>
+  <meta name="viewport" content="width=1200, height=630">
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #01091F;
+      --ink-soft: #021653;
+      --surface: #061D46;
+      --surface-raised: #0A2855;
+      --electric: #1773F4;
+      --cyan: #1AE3E7;
+      --text: #F2F5F7;
+      --muted: #ABC3D9;
+      --dim: #7897B6;
+      --heading: "Segoe UI", "Avenir Next", ui-rounded, system-ui, sans-serif;
+      --body: system-ui, sans-serif;
+      --mono: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 1200px;
+      height: 630px;
+      margin: 0;
+      overflow: hidden;
+      background: var(--ink);
+    }
+
+    body {
+      color: var(--text);
+      font-family: var(--body);
+    }
+
+    .og {
+      position: relative;
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 86% 14%, rgba(23, 115, 244, .20), transparent 29%),
+        linear-gradient(118deg, var(--ink) 0%, var(--ink-soft) 58%, var(--surface) 100%);
+    }
+
+    .og::before {
+      position: absolute;
+      inset: 32px;
+      border: 1px solid rgba(171, 195, 217, .24);
+      content: "";
+    }
+
+    .og::after {
+      position: absolute;
+      right: -120px;
+      bottom: -178px;
+      width: 610px;
+      height: 610px;
+      border: 1px solid rgba(26, 227, 231, .20);
+      border-radius: 50%;
+      box-shadow: 0 0 0 28px rgba(26, 227, 231, .035), 0 0 0 56px rgba(26, 227, 231, .025);
+      content: "";
+    }
+
+    .mark {
+      position: absolute;
+      top: 72px;
+      left: 74px;
+      width: 84px;
+      height: 84px;
+    }
+
+    .kicker {
+      position: absolute;
+      top: 80px;
+      left: 190px;
+      margin: 0;
+      color: var(--cyan);
+      font-family: var(--mono);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: .15em;
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      position: absolute;
+      top: 196px;
+      left: 74px;
+      width: 780px;
+      margin: 0;
+      color: var(--text);
+      font-family: var(--heading);
+      font-size: 70px;
+      font-weight: 700;
+      letter-spacing: -.045em;
+      line-height: 1.04;
+    }
+
+    .trace {
+      position: absolute;
+      top: 178px;
+      right: 78px;
+      width: 230px;
+      height: 180px;
+    }
+
+    .trace path {
+      fill: none;
+      stroke: var(--cyan);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 4;
+    }
+
+    .trace circle:first-of-type { fill: var(--electric); }
+    .trace circle:last-of-type { fill: var(--cyan); }
+
+    .rule {
+      position: absolute;
+      right: 74px;
+      bottom: 106px;
+      left: 74px;
+      height: 1px;
+      background: rgba(171, 195, 217, .28);
+    }
+
+    .name {
+      position: absolute;
+      bottom: 65px;
+      left: 74px;
+      margin: 0;
+      color: var(--text);
+      font-family: var(--heading);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -.015em;
+    }
+
+    .descriptor {
+      position: absolute;
+      right: 74px;
+      bottom: 68px;
+      margin: 0;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 15px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <main class="og" aria-label="Jober Cavalcante — O problema vem antes da tecnologia.">
+    <img class="mark" src="assets/brand/logo-mark.svg" width="84" height="84" alt="">
+    <p class="kicker">Decisões em circuito</p>
+    <h1>O problema vem antes da tecnologia.</h1>
+    <svg class="trace" viewBox="0 0 230 180" aria-hidden="true">
+      <path d="M15 28h62v44h38v58h46v-42h54" />
+      <circle cx="15" cy="28" r="7" />
+      <circle cx="215" cy="88" r="7" />
+    </svg>
+    <div class="rule"></div>
+    <p class="name">Jober Cavalcante</p>
+    <p class="descriptor">Sistemas · produto · engenharia</p>
+  </main>
+</body>
+</html>

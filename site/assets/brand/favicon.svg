@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="favicon-title">
+  <title id="favicon-title">Jober Cavalcante</title>
+  <path d="M347 233V154c0-22-18-40-40-40H203c-22 0-40 18-40 40v205c0 22 18 40 40 40h65c17 0 30-13 30-30v-10c0-17 13-30 30-30h18l27-28" fill="none" stroke="#1AE3E7" stroke-linecap="round" stroke-linejoin="round" stroke-width="20"/>
+  <path d="m226 213-27 27 27 27m65-54 27 27-27 27m-20-28-17 56m101 91 29-29m-50 54 29-29" fill="none" stroke="#F2F5F7" stroke-linecap="round" stroke-linejoin="round" stroke-width="18"/>
+  <circle cx="373" cy="300" r="18" fill="#1773F4"/><circle cx="405" cy="328" r="18" fill="#1AE3E7"/>
+</svg>
