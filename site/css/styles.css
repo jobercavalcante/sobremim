@@ -1027,10 +1027,13 @@ body.surge #trace .trace-node.is-lit {
   align-items: center;
   gap: 0;
   opacity: .6;
+  cursor: pointer;
   transition: opacity .6s ease;
 }
 
 .cta-chip.is-live { opacity: 1; }
+
+.cta-chip:active { transform: translateY(1px); }
 
 /* LCD de duas linhas: barra de status + prompt do sistema */
 .cta-chip__lcd {

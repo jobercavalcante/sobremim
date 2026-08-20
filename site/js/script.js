@@ -342,7 +342,7 @@
     ctaChip.classList.add("is-live");
     const txt = ctaChip.querySelector(".cta-chip__text");
     if (!txt) return;
-    const msgs = ["sinal recebido", "processando problema", "pronto para o próximo"];
+    const msgs = ["sinal recebido", "processando problema", "pronto para o próximo", "feito com ia assistida"];
     if (reduced.matches) {
       txt.textContent = msgs[msgs.length - 1];
       return;
@@ -366,6 +366,24 @@
     };
     // o boot final começa a digitar primeiro; o CI responde em seguida
     setTimeout(run, 900);
+  }
+
+  // easter egg: este site foi construído com IA assistida (clique no cta-chip)
+  const EASTER_ENABLED = true; // flag explícita: false desliga sem remover o código
+  function showToast(msg) {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add("is-on");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove("is-on"), 4200);
+  }
+  const ctaChipEl = document.getElementById("cta-chip");
+  if (EASTER_ENABLED && ctaChipEl) {
+    ctaChipEl.addEventListener("click", () => {
+      showToast("psst… este site foi feito com IA assistida: análise, código, testes e revisão, com a decisão humana no comando. jober.os");
+      window.dispatchEvent(new CustomEvent("board:surge")); // a placa responde
+    });
   }
 
   if (contato && "IntersectionObserver" in window) {
