@@ -1,9 +1,9 @@
 /* ==========================================================================
-   board-fx.js — pad PCB determinístico (vias, pads, trilhas de cobre) +
+   board-fx.js · pad PCB determinístico (vias, pads, trilhas de cobre) +
    pulsos de sinal viajando em trilhas ativas. Não é partícula aleatória:
-   é uma placa gerada com seed fixa — técnica, intencional, conectada.
+   é uma placa gerada com seed fixa · técnica, intencional, conectada.
    Regras: DPR ≤ 2 / 1.5 touch · pausa em aba oculta · reduced-motion →
-           1 frame estático · ≤900px → não roda (canvas oculto via CSS)
+           1 frame estático · ≤900px → modo reduzido (2 trilhas, blur menor)
    ========================================================================== */
 (() => {
   "use strict";
@@ -29,7 +29,7 @@
   let pulses = [];
   let surge = 0;           // 1 → decai para 0: reforço quando o sinal chega (board:surge)
 
-  /* PRNG com seed fixa: a placa é sempre a mesma — intencional */
+  /* PRNG com seed fixa: a placa é sempre a mesma · intencional */
   function mulberry32(seed) {
     let a = seed >>> 0;
     return () => {
@@ -114,7 +114,7 @@
     activeTraces = [];
     pulses = [];
 
-    const count = narrow.matches ? 0 : coarse.matches || (navigator.hardwareConcurrency || 8) <= 4 ? 3 : 5;
+    const count = narrow.matches ? 2 : coarse.matches || (navigator.hardwareConcurrency || 8) <= 4 ? 3 : 5;
 
     for (let i = 0; i < count; i++) {
       const y0 = H * (0.12 + rnd() * 0.76);
@@ -204,7 +204,7 @@
       ctx.arc(pos.x, pos.y, pl.r * (1 + surge * 0.35), 0, Math.PI * 2);
       ctx.fillStyle = `rgba(${SIGNAL}, ${0.7 + surge * 0.25})`;
       ctx.shadowColor = `rgba(${SIGNAL}, ${0.7 + surge * 0.3})`;
-      ctx.shadowBlur = 7 + surge * 12;
+      ctx.shadowBlur = narrow.matches ? 4 : 7 + surge * 12;
       ctx.fill();
       ctx.shadowBlur = 0;
     });
@@ -218,7 +218,6 @@
   }
 
   function start() {
-    if (narrow.matches) { stop(); return; }
     if (reduced.matches) { stop(); draw(false); return; } // 1 frame estático
     if (!running) {
       running = true;
@@ -245,9 +244,8 @@
 
   window.addEventListener("resize", resize, { passive: true });
 
-  /* surge: o sinal chegou na faixa drench — reforço breve de brilho/velocidade */
+  /* surge: o sinal chegou na faixa drench · reforço breve de brilho/velocidade */
   window.addEventListener("board:surge", () => {
-    if (narrow.matches) return;
     surge = 1;
     if (!running) {
       // reduced-motion: um frame mais brilhante, depois volta ao estado calmo

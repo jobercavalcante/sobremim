@@ -1,5 +1,5 @@
 /* ==========================================================================
-   script.js — nav, reveals, boot typewriter, decode, trace scroll-driven,
+   script.js · nav, reveals, boot typewriter, decode, trace scroll-driven,
    CTAs honestos. Regras: reduced-motion · sem libs · progressive enhancement
    ========================================================================== */
 (() => {
@@ -107,7 +107,7 @@
 
   /* ---------- trace SVG: o traço de cobre que se desenha com o scroll ---------- */
   const svg = document.getElementById("trace");
-  const stops = ["topo", "metodo", "fundacao", "produtos", "ia", "quem", "contato"];
+  const stops = ["topo", "metodo", "fundacao", "bancada", "ia", "quem", "contato"];
 
   let tracePath = null;
   let traceGlow = null;
@@ -125,13 +125,21 @@
     if (!svg) return;
     const docH = document.documentElement.scrollHeight;
     const narrow = window.innerWidth <= 900;
-    const xA = narrow ? 14 : 56;
-    const xB = narrow ? 28 : 112;
+    const xA = narrow ? 8 : 56;
+    const xB = narrow ? window.innerWidth - 8 : 112;
 
-    svg.setAttribute("width", narrow ? 44 : 160);
+    svg.setAttribute("width", narrow ? String(window.innerWidth) : "160");
     svg.setAttribute("height", docH);
     svg.style.height = `${docH}px`;
     svg.innerHTML = "";
+
+    // topo e fim de cada seção: no mobile as travessias usam a folga
+    // entre seções (nunca dentro de caixas ou sobre textos)
+    const secTop = stops.map((id) => document.getElementById(id)?.offsetTop ?? 0);
+    const secBot = stops.map((id) => {
+      const el = document.getElementById(id);
+      return el ? el.offsetTop + el.offsetHeight : 0;
+    });
 
     nodeYs = stops.map((id) => {
       const el = document.getElementById(id);
@@ -140,14 +148,20 @@
     });
 
     // caminho estilo PCB: colunas alternadas com cantos de 45°
+    // (mobile: bordas da tela, travessia reta na folga entre seções)
     let d = `M ${xA} 72`;
     let cur = xA;
     nodeYs.forEach((y, i) => {
       const target = i % 2 === 0 ? xA : xB;
       if (target !== cur) {
         const dx = Math.abs(target - cur);
-        const yCorner = Math.max(72, y - 140);
-        d += ` L ${cur} ${yCorner} L ${target} ${yCorner + dx}`;
+        if (narrow) {
+          const yMid = Math.max(72, Math.round((secBot[i - 1] + secTop[i]) / 2));
+          d += ` L ${cur} ${yMid} L ${target} ${yMid}`;
+        } else {
+          const yCorner = Math.max(72, y - 140);
+          d += ` L ${cur} ${yCorner} L ${target} ${yCorner + dx}`;
+        }
         cur = target;
       }
       d += ` L ${cur} ${y}`;
@@ -319,11 +333,47 @@
   }
 
   const contato = document.getElementById("contato");
+
+  // cta-chip: o co-processador do conector acorda e responde no prompt jober.os
+  function wakeCtaChip() {
+    const ctaChip = document.getElementById("cta-chip");
+    if (!ctaChip || ctaChip.dataset.live) return;
+    ctaChip.dataset.live = "1";
+    ctaChip.classList.add("is-live");
+    const txt = ctaChip.querySelector(".cta-chip__text");
+    if (!txt) return;
+    const msgs = ["sinal recebido", "processando problema", "pronto para o próximo"];
+    if (reduced.matches) {
+      txt.textContent = msgs[msgs.length - 1];
+      return;
+    }
+    const type = (msg, cb) => {
+      txt.textContent = "";
+      let ci = 0;
+      const t = setInterval(() => {
+        ci++;
+        txt.textContent = msg.slice(0, ci);
+        if (ci >= msg.length) {
+          clearInterval(t);
+          setTimeout(cb, 600);
+        }
+      }, 42);
+    };
+    let phase = 0;
+    const run = () => {
+      if (phase >= msgs.length) return;
+      type(msgs[phase], () => { phase++; run(); });
+    };
+    // o boot final começa a digitar primeiro; o CI responde em seguida
+    setTimeout(run, 900);
+  }
+
   if (contato && "IntersectionObserver" in window) {
     const contatoIO = new IntersectionObserver(
       (entries) =>
         entries.forEach((e) => {
           if (!e.isIntersecting) return;
+          wakeCtaChip();
           // boot final digita; o circuito fecha no instante em que termina
           typeBoot(document.getElementById("boot-final"), 4000, completeCircuit);
           contatoIO.disconnect();
@@ -332,6 +382,7 @@
     );
     contatoIO.observe(contato);
   } else {
+    wakeCtaChip();
     typeBoot(document.getElementById("boot-final"), 4000, completeCircuit);
   }
 

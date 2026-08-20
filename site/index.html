@@ -5,20 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Jober Cavalcante · Tech Lead & Full Stack Sênior · Do cobre ao software</title>
   <meta name="description" content="Engenheiro de Computação com pós em Engenharia de Software. Tech Lead e Full Stack Sênior: GLPI, ITSM, PHP, produtos próprios e IA como engenharia.">
-  <!-- TODO: substituir por domínio público real antes de publicar -->
-  <link rel="canonical" href="./">
+  <link rel="canonical" href="https://jober.dev.br/">
   <meta property="og:title" content="Jober Cavalcante · A Placa do Engenheiro">
   <meta property="og:description" content="Do cobre ao software: Tech Lead & Full Stack Sênior com +15 anos de produção, produtos próprios e IA como engenharia.">
-  <!-- TODO: og:image exige URL absoluta ao publicar -->
-  <meta property="og:image" content="og.png">
+  <meta property="og:image" content="https://jober.dev.br/og.png?v=3">
   <meta property="og:image:alt" content="Cartão escuro com trilhas de circuito: logo de celular com código, nome Jober Cavalcante, título Do cobre ao software e terminal de boot com destaques da carreira.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="./">
+  <meta property="og:url" content="https://jober.dev.br/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#07090f">
   <meta name="color-scheme" content="dark">
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=3">
   <script>document.documentElement.classList.replace("no-js", "js");</script>
 </head>
 <body>
@@ -46,7 +44,7 @@
         <ul class="nav-links" id="nav-menu">
           <li><a href="#metodo">Firmware</a></li>
           <li><a href="#fundacao">Produção</a></li>
-          <li><a href="#produtos">Bancada</a></li>
+          <li><a href="#bancada">Bancada</a></li>
           <li><a href="#ia">IA</a></li>
           <li><a class="btn btn--primary btn--nav" href="#contato">Contato</a></li>
         </ul>
@@ -67,7 +65,7 @@
           <p class="hero__meta" data-reveal>tech lead · full stack sênior · glpi, plugins &amp; itsm · <b>ia como engenharia</b></p>
           <div class="hero__actions" data-reveal>
             <a class="btn btn--primary" href="#metodo">Ler a placa</a>
-            <a class="btn btn--ghost" href="#produtos">Bancada</a>
+            <a class="btn btn--ghost" href="#bancada">Bancada</a>
           </div>
           <p class="hero__scroll-hint" data-reveal>role para traçar o sinal</p>
         </div>
@@ -122,9 +120,9 @@
 
         <div class="found-grid">
           <article class="card card--wide" data-reveal>
-            <span class="tag">glpi 10 · 11 / itsm / k8s</span>
+            <span class="tag">glpi 9.2 → 11 / itsm / k8s</span>
             <h3>GLPI, plugins &amp; ITSM</h3>
-            <p>Especialização profunda: arquitetura de plugins, integrações, webhooks avançados, migrações 10→11, performance e produção em Kubernetes. Extensão de capacidade, não só administração.</p>
+            <p>Especialização profunda: arquitetura de plugins, automações, relatórios, integrações e webhooks avançados, do GLPI 9.2 ao 11. Correção de falhas, melhorias de fluxo, migrações e sustentação de ambientes legados, com performance e produção em Kubernetes. Extensão de capacidade, não só administração.</p>
           </article>
 
           <article class="card card--mid" data-reveal>
@@ -134,9 +132,9 @@
           </article>
 
           <article class="card card--mid" data-reveal>
-            <span class="tag">apis / azure / docker</span>
+            <span class="tag">apis / azure / docker / node</span>
             <h3>Integrações &amp; legado</h3>
-            <p>APIs, Azure, LDAP, webhooks. Modernização gradual: Kohana 3.2 virando SaaS com Laravel + Inertia, sem perder continuidade operacional.</p>
+            <p>APIs, Azure, LDAP, webhooks. SGDA: gestão, arquivamento e digitalização de documentos com Node.js, MongoDB, Angular, Electron e Next.js. Modernização gradual: Kohana 3.2 virando SaaS com Laravel + Inertia, sem perder continuidade operacional.</p>
           </article>
 
           <article class="card card--wide" data-reveal>
@@ -145,12 +143,42 @@
             <p>Participação em decisões com PO, clientes e diretoria. POCs como ferramenta: totem, cabine de atendimento, viabilidade antes de investimento.</p>
           </article>
 
-          <article class="card card--full" data-reveal>
+          <article class="card card--full card--extrapola" data-reveal>
+            <span class="extrapola__seal" aria-hidden="true"><b>extrapola</b><i>2020</i></span>
             <div>
-              <h3>Trajetória</h3>
-              <p>UCDB (2006–2025): sistemas educacionais, Moodle e um vestibular online reconhecido pela instituição. GEOI2: sistema de trilhas em Laravel integrado ao Moodle. Inovvati: GLPI, POCs e arquitetura hoje.</p>
+              <span class="tag">case · ucdb · 2020</span>
+              <h3>Vestibular 100% online na pandemia.</h3>
+              <p>Em 2020, quando o presencial parou, o vestibular da UCDB não podia parar junto. Sistema próprio, fora do Moodle, no ar para os candidatos e reconhecido institucionalmente pelo Extrapola.</p>
             </div>
-            <span class="tag">2006 → hoje</span>
+          </article>
+
+          <article class="card card--full card--trajetoria" data-reveal>
+            <div class="traj-head">
+              <h3>Trajetória</h3>
+              <span class="tag">2006 → hoje</span>
+            </div>
+            <ol class="traj">
+              <li class="traj__item">
+                <p class="traj__period">nds · estágio</p>
+                <h4>O primeiro sinal na placa</h4>
+                <p>Estágio no Núcleo de Desenvolvimento de Software, ainda na graduação em Engenharia da Computação. Desenvolvimento em sistema de factoring, inclusive em dispositivo Treo: o começo do caminho que leva ao software.</p>
+              </li>
+              <li class="traj__item">
+                <p class="traj__period">ucdb · programador php · administrador de ava</p>
+                <h4>Sistemas educacionais &amp; Moodle</h4>
+                <p>Dezembro de 2006 a julho de 2025. Programador PHP e administrador de AVA: Moodle em escala: módulos, funcionalidades, integrações e evolução da plataforma. Fora dele, o vestibular online de 2020, reconhecido pelo Extrapola.</p>
+              </li>
+              <li class="traj__item">
+                <p class="traj__period">geoi2 · analista de sistema</p>
+                <h4>Trilhas em Laravel, decisão com contexto</h4>
+                <p>Analista de sistema. Sistema de trilhas de cursos Laravel + Moodle: área administrativa, alunos, reaproveitamento e certificados por curso e por trilha. Next.js no Fundesporte. Responsável pela implementação, decidindo junto com PO e analista.</p>
+              </li>
+              <li class="traj__item">
+                <p class="traj__period">inovvati · desenvolvedor sênior · tech lead</p>
+                <h4>GLPI, SGDA &amp; IA agêntica</h4>
+                <p>Desenvolvedor Sênior com atuação de Tech Lead. GLPI 9.2, 10 e 11: plugins, automações, integrações, relatórios e sustentação de legados. SGDA com Node.js, MongoDB, Angular, Electron e Next.js. POCs de totem e cabine, workshop interno de IA agêntica e skills, além dos apps Android Sonar Promos e StreamNest dirigidos por IA.</p>
+              </li>
+            </ol>
           </article>
 
           <div class="stack" data-reveal>
@@ -193,13 +221,13 @@
       </div>
     </div>
 
-    <!-- ============ NÓ 03 · APLICAÇÃO (produtos) ============ -->
-    <section id="produtos" aria-labelledby="produtos-titulo">
+    <!-- ============ NÓ 03 · APLICAÇÃO (bancada) ============ -->
+    <section id="bancada" aria-labelledby="bancada-titulo">
       <span class="ghost ghost--produtos" aria-hidden="true">SINAL</span>
       <div class="container">
         <header class="section-head" data-reveal>
           <p class="kicker"><span class="kicker__pad" aria-hidden="true"></span><span class="kicker__layer">L3 · aplicação</span> nó 03 · bancada</p>
-          <h2 id="produtos-titulo">O que já saiu<br>da bancada.</h2>
+          <h2 id="bancada-titulo">O que já saiu<br>da bancada.</h2>
           <p class="lead">A camada de aplicação: problema próprio, usuário real, identidade própria. Quatro projetos, quatro sinais distintos na mesma placa.</p>
         </header>
 
@@ -213,6 +241,12 @@
               <li><b>solução</b><span>App Android com DLNA e Chromecast: da tela pequena para a sala.</span></li>
             </ul>
             <span class="tag">android · telegram · dlna / chromecast</span>
+            <a class="chip-link" href="https://streamnest.pages.dev/" target="_blank" rel="noopener" aria-label="Abrir projeto StreamNest">
+              <span class="chip-link__lcd" aria-hidden="true">abrir projeto<span class="chip-link__lcd-cursor"></span></span>
+              <span class="chip-link__trace" aria-hidden="true"></span>
+              <span class="chip-link__ic" aria-hidden="true"></span>
+              <span class="chip-link__tip">streamnest</span>
+            </a>
           </article>
 
           <article class="case case--sonar" data-reveal>
@@ -224,6 +258,12 @@
               <li><b>solução</b><span>No meio do cardume, o alerta certo: o peixe dourado.</span></li>
             </ul>
             <span class="tag">android · tdlib · matching · ia local</span>
+            <a class="chip-link" href="https://sonarpromos.pages.dev/" target="_blank" rel="noopener" aria-label="Abrir projeto Sonar Promos">
+              <span class="chip-link__lcd" aria-hidden="true">abrir projeto<span class="chip-link__lcd-cursor"></span></span>
+              <span class="chip-link__trace" aria-hidden="true"></span>
+              <span class="chip-link__ic" aria-hidden="true"></span>
+              <span class="chip-link__tip">sonar promos</span>
+            </a>
           </article>
 
           <article class="case case--recanto" data-reveal>
@@ -235,6 +275,12 @@
               <li><b>solução</b><span>Experiência web que move o visitante por dentro da árvore.</span></li>
             </ul>
             <span class="tag">html · css · js · atmosfera</span>
+            <a class="chip-link" href="https://recanto-beijaflor.pages.dev/" target="_blank" rel="noopener" aria-label="Abrir projeto Recanto Beija-Flor">
+              <span class="chip-link__lcd" aria-hidden="true">abrir projeto<span class="chip-link__lcd-cursor"></span></span>
+              <span class="chip-link__trace" aria-hidden="true"></span>
+              <span class="chip-link__ic" aria-hidden="true"></span>
+              <span class="chip-link__tip">recanto beija-flor</span>
+            </a>
           </article>
 
           <article class="case case--arte" data-reveal>
@@ -246,6 +292,12 @@
               <li><b>solução</b><span>O universo da autora DaNiKa, selo Poeta Vis-UaU, vivo no navegador.</span></li>
             </ul>
             <span class="tag">html · css · js · narrativa</span>
+            <a class="chip-link" href="https://arteconectamente.pages.dev/" target="_blank" rel="noopener" aria-label="Abrir projeto ARTEconectaMENTE">
+              <span class="chip-link__lcd" aria-hidden="true">abrir projeto<span class="chip-link__lcd-cursor"></span></span>
+              <span class="chip-link__trace" aria-hidden="true"></span>
+              <span class="chip-link__ic" aria-hidden="true"></span>
+              <span class="chip-link__tip">arteconectamente</span>
+            </a>
           </article>
         </div>
       </div>
@@ -263,15 +315,15 @@
         <div class="split">
           <article class="card" data-reveal>
             <h3>Agentes &amp; skills</h3>
-            <p>Conhecimento e processo virando artefato reutilizável, não prompt solto. Skills próprias guiam desde landing pages até auditorias.</p>
+            <p>Conhecimento e processo virando artefato reutilizável, não prompt solto. No contexto do GLPI, skills e agentes especializados padronizam processos e códigos gerados para a equipe, com um workshop interno de IA agêntica apresentado na Inovvati.</p>
           </article>
           <article class="card" data-reveal>
             <h3>Desenvolvimento assistido</h3>
-            <p>Análise de projetos, documentação, refatoração, testes, revisão de UI/UX e arquitetura: IA em cada etapa do circuito, com decisão humana no fim.</p>
+            <p>Análise de projetos, documentação, refatoração, testes e revisão de UI/UX: IA em cada etapa do circuito, com decisão humana no fim. É assim que os apps Android Sonar Promos e StreamNest saíram da bancada, do conceito à validação final.</p>
           </article>
           <article class="card" data-reveal>
             <h3>Modelos locais &amp; contexto</h3>
-            <p>Custo, latência, privacidade, tamanho de modelo: entender antes de depender. Memória persistente e economia de tokens como engenharia.</p>
+            <p>Custo, latência, privacidade, tamanho de modelo: entender antes de depender. Memória persistente, economia de tokens e padrões de uso de IA como engenharia, não gimmick.</p>
           </article>
         </div>
       </div>
@@ -289,6 +341,11 @@
           <blockquote data-reveal>Construir é parte do trabalho. Entender por que algo quebra, também.</blockquote>
           <p data-reveal>Engenheiro de Computação, pós-graduado em Engenharia de Software. Não gosto de problema sem explicação; persistência não é teimosia, é respeito pelo contexto de quem usa o sistema.</p>
           <p data-reveal>Engenharia suficiente para resolver, produto suficiente para entender por que importa, experiência suficiente para funcionar no mundo real.</p>
+          <ul class="who__edu" data-reveal>
+            <li><span>bacharelado</span>Engenharia da Computação · UNIDERP</li>
+            <li><span>pós-graduação</span>Engenharia de Software · UniFECAF</li>
+            <li><span>base</span>Campo Grande · Mato Grosso do Sul · Brasil</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -299,12 +356,25 @@
         <div class="cta-panel">
           <p class="kicker" data-reveal><span class="kicker__pad" aria-hidden="true"></span><span class="kicker__layer">L6 · conector</span> nó 06 · contato</p>
           <h2 id="cta-titulo" data-reveal>Vamos fechar o circuito.</h2>
-          <p class="lead" data-reveal>Problema difícil, sistema complexo, produto novo? O ponto de partida é sempre o mesmo: entender o problema antes de qualquer código. A placa já está pronta para receber o sinal.</p>
+          <p class="lead" data-reveal>Problema difícil, sistema complexo, produto novo? Nenhum componente entra na placa antes do entendimento do problema. Ela já está energizada: mande o seu sinal.</p>
           <div class="cta-panel__actions" data-reveal>
             <a class="btn btn--primary" href="mailto:jober.cavalcante@gmail.com">E-mail</a>
             <a class="btn btn--ghost" href="https://www.linkedin.com/in/jobercavalcante/" target="_blank" rel="noopener">LinkedIn</a>
           </div>
           <pre class="boot boot--final" id="boot-final" data-reveal aria-label="Status final do circuito"><span class="boot__bar" aria-hidden="true"><i></i><i></i><i></i><span>jober.os</span></span><span class="boot__line">trace: 100% · circuito fechado</span><span class="boot__line">todos os nós responderam</span><span class="boot__line boot__line--ai">jober.os estável · pronto para o próximo problema</span><span class="boot__cursor" aria-hidden="true"></span></pre>
+
+          <div class="cta-chip" id="cta-chip" aria-hidden="true">
+            <div class="cta-chip__lcd">
+              <span class="cta-chip__bar">jober.os<span class="cta-chip__leds"><i></i><i></i><i></i></span></span>
+              <span class="cta-chip__line"><span class="cta-chip__prompt">jober.os&gt;</span><span class="cta-chip__text"></span><span class="cta-chip__cursor"></span></span>
+            </div>
+            <span class="cta-chip__trace"></span>
+            <div class="cta-chip__ic">
+              <span class="cta-chip__led cta-chip__led--a"></span>
+              <span class="cta-chip__led cta-chip__led--b"></span>
+              <span class="cta-chip__led cta-chip__led--c"></span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -320,7 +390,7 @@
 
   <button class="to-top" type="button" id="to-top" aria-label="Voltar ao topo" hidden>↑</button>
 
-  <script src="js/script.js" defer></script>
-  <script src="js/board-fx.js" defer></script>
+  <script src="js/script.js?v=3" defer></script>
+  <script src="js/board-fx.js?v=3" defer></script>
 </body>
 </html>
