@@ -186,6 +186,7 @@ Entre elas:
 - MySQL;
 - MariaDB;
 - PostgreSQL;
+- SQL Server;
 - MongoDB;
 - SQL;
 - consultas complexas;
