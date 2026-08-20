@@ -332,6 +332,85 @@
     requestAnimationFrame(step);
   }
 
+  /* ---------- terminal jober.os: o conector aceita digitação real ---------- */
+  // Após o boot final fechar o circuito, o prompt aceita sinal digitado.
+  // A cada tecla há chance de "sinal corrompido": a tela tilta/glitcha (glitch-fx.js).
+  function armSignalTerminal(bootEl) {
+    if (!bootEl || bootEl.dataset.shell) return;
+    bootEl.dataset.shell = "1";
+
+    const MAX = 42;
+    const hint = document.createElement("span");
+    hint.className = "term-line term-hint";
+    hint.textContent = "> digite para enviar o sinal";
+    bootEl.appendChild(hint);
+
+    const line = document.createElement("span");
+    line.className = "term-line";
+    line.innerHTML = '<span class="term-prompt">jober.os&gt;</span><span class="term-typed"></span><span class="boot__cursor" aria-hidden="true"></span>';
+
+    const field = document.createElement("input");
+    field.type = "text";
+    field.className = "term-field";
+    field.setAttribute("autocomplete", "off");
+    field.setAttribute("autocapitalize", "off");
+    field.setAttribute("spellcheck", "false");
+    field.setAttribute("aria-label", "Terminal jober.os · digite para enviar o sinal");
+    bootEl.append(line, field);
+
+    const typed = line.querySelector(".term-typed");
+    let glitching = false;
+
+    const echo = (text, crash) => {
+      const e = document.createElement("span");
+      e.className = "term-line term-echo" + (crash ? " term-echo--crash" : "");
+      e.textContent = text;
+      bootEl.insertBefore(e, line);
+      const echoes = bootEl.querySelectorAll(".term-echo");
+      while (echoes.length > 3) echoes[0].remove();
+    };
+
+    const resetPrompt = () => {
+      field.value = "";
+      typed.textContent = "";
+      line.style.display = "";
+    };
+
+    field.addEventListener("keydown", (ev) => {
+      if (glitching) { ev.preventDefault(); return; }
+      if (ev.key === "Enter") {
+        ev.preventDefault();
+        const msg = field.value.trim();
+        if (msg) echo("sinal: «" + msg.slice(0, MAX) + "»");
+        resetPrompt();
+        return;
+      }
+      if (ev.key.length === 1 && !ev.ctrlKey && !ev.metaKey && !ev.altKey) {
+        if (field.value.length >= MAX) { ev.preventDefault(); return; }
+        // sinal corrompido: chance cresce com o que foi digitado (6% → 15%)
+        const chance = Math.min(0.15, 0.06 + (field.value.length + 1) * 0.004);
+        if (!reduced.matches && Math.random() < chance) triggerGlitch();
+      }
+    });
+
+    field.addEventListener("input", () => {
+      if (glitching) return;
+      typed.textContent = field.value;
+    });
+
+    function triggerGlitch() {
+      glitching = true;
+      window.dispatchEvent(new CustomEvent("screen:glitch"));
+      echo("!!! sinal corrompido · restabelecendo link !!!", true);
+      line.style.display = "none";
+      field.blur();
+      setTimeout(() => {
+        glitching = false;
+        resetPrompt();
+      }, 1300);
+    }
+  }
+
   const contato = document.getElementById("contato");
 
   // cta-chip: o co-processador do conector acorda e responde no prompt jober.os
@@ -393,7 +472,10 @@
           if (!e.isIntersecting) return;
           wakeCtaChip();
           // boot final digita; o circuito fecha no instante em que termina
-          typeBoot(document.getElementById("boot-final"), 4000, completeCircuit);
+          typeBoot(document.getElementById("boot-final"), 4000, () => {
+  completeCircuit();
+  armSignalTerminal(document.getElementById("boot-final"));
+});
           contatoIO.disconnect();
         }),
       { threshold: 0.2 }
@@ -401,7 +483,10 @@
     contatoIO.observe(contato);
   } else {
     wakeCtaChip();
-    typeBoot(document.getElementById("boot-final"), 4000, completeCircuit);
+    typeBoot(document.getElementById("boot-final"), 4000, () => {
+  completeCircuit();
+  armSignalTerminal(document.getElementById("boot-final"));
+});
   }
 
   /* ---------- to-top ---------- */
