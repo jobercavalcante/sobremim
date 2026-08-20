@@ -1,5 +1,7 @@
 [CmdletBinding()]
-param()
+param(
+  [switch] $Verify
+)
 
 $ErrorActionPreference = 'Stop'
 
@@ -19,7 +21,9 @@ if (-not (Test-Path -LiteralPath $nodeModules)) {
 $env:NODE_PATH = $nodeModules
 Push-Location $repoRoot
 try {
-  & $nodeExecutable $captureScript
+  $captureArguments = @($captureScript)
+  if ($Verify) { $captureArguments += '--verify' }
+  & $nodeExecutable @captureArguments
   $exitCode = $LASTEXITCODE
 } finally {
   Pop-Location

@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('node:assert/strict');
+const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
@@ -8,6 +9,8 @@ const test = require('node:test');
 const repoRoot = path.resolve(__dirname, '..');
 const manifestPath = path.join(repoRoot, 'site', 'assets', 'ASSET-SOURCES.md');
 const ogImagePath = path.join(repoRoot, 'site', 'og-1200x630.png');
+const qaScreenshotDirectory = path.join(repoRoot, 'docs', 'qa', 'screenshots');
+const qaScreenshotManifestPath = path.join(qaScreenshotDirectory, 'sha256.json');
 const destinationRoot = path.join(repoRoot, 'site', 'assets');
 const sourceRoots = [
   path.resolve('E:/projetos/jober/page/docs'),
@@ -101,6 +104,24 @@ function expectedDimensions(value) {
 }
 
 const assets = parseManifest();
+test('QA screenshot manifest pins exactly the tracked visual evidence', () => {
+  assert.ok(fs.existsSync(qaScreenshotManifestPath), 'QA screenshots require a versioned SHA-256 manifest');
+  const manifest = JSON.parse(fs.readFileSync(qaScreenshotManifestPath, 'utf8'));
+  assert.equal(manifest.schemaVersion, 1, 'QA screenshot manifest schema must be explicit');
+  assert.deepEqual(Object.keys(manifest.files).sort(), [
+    'personal-landing-1024x768.png',
+    'personal-landing-1440x1000.png',
+    'personal-landing-360x800.png',
+    'personal-landing-768x1024.png',
+  ], 'QA screenshot manifest must cover exactly the four supported viewports');
+  for (const [filename, expectedHash] of Object.entries(manifest.files)) {
+    assert.match(expectedHash, /^[a-f0-9]{64}$/, `${filename} must have a lowercase SHA-256`);
+    const artifact = path.join(qaScreenshotDirectory, filename);
+    assert.ok(fs.existsSync(artifact), `tracked QA screenshot is missing: ${filename}`);
+    const actualHash = crypto.createHash('sha256').update(fs.readFileSync(artifact)).digest('hex');
+    assert.equal(actualHash, expectedHash, `tracked QA screenshot must match its pinned SHA-256: ${filename}`);
+  }
+});
 test('Open Graph image is an exact 1200×630 PNG', () => {
   assert.ok(fs.existsSync(ogImagePath), 'Open Graph image must exist');
   const bytes = fs.readFileSync(ogImagePath);

@@ -1,5 +1,6 @@
 'use strict';
 
+const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const { chromium } = require('playwright');
@@ -13,6 +14,44 @@ const VIEWPORTS = [
   { width: 1024, height: 768 },
   { width: 1440, height: 1000 },
 ];
+const SCREENSHOT_FILENAMES = VIEWPORTS.map(({ width, height }) => `personal-landing-${width}x${height}.png`);
+
+function sha256(bytes) {
+  return crypto.createHash('sha256').update(bytes).digest('hex');
+}
+
+function readManifest(manifestPath) {
+  if (!fs.existsSync(manifestPath)) throw new Error(`Missing versioned QA hash manifest: ${manifestPath}`);
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  if (manifest.schemaVersion !== 1 || !manifest.files || typeof manifest.files !== 'object') {
+    throw new Error(`Invalid QA hash manifest schema: ${manifestPath}`);
+  }
+  const filenames = Object.keys(manifest.files).sort();
+  if (JSON.stringify(filenames) !== JSON.stringify([...SCREENSHOT_FILENAMES].sort())) {
+    throw new Error(`QA hash manifest must list exactly: ${SCREENSHOT_FILENAMES.join(', ')}`);
+  }
+  for (const [filename, hash] of Object.entries(manifest.files)) {
+    if (!/^[a-f0-9]{64}$/.test(hash)) throw new Error(`Invalid SHA-256 for ${filename} in ${manifestPath}`);
+  }
+  return manifest;
+}
+
+function verifyHashes(results, outputDirectory, manifestPath) {
+  const manifest = readManifest(manifestPath);
+  for (const result of results) {
+    const expected = manifest.files[result.filename];
+    if (result.sha256 !== expected) {
+      throw new Error(`Regenerated QA screenshot hash mismatch for ${result.filename}: expected ${expected}, got ${result.sha256}`);
+    }
+    const trackedPath = path.join(outputDirectory, result.filename);
+    if (!fs.existsSync(trackedPath)) throw new Error(`Tracked QA screenshot is missing: ${trackedPath}`);
+    const trackedHash = sha256(fs.readFileSync(trackedPath));
+    if (trackedHash !== expected) {
+      throw new Error(`Tracked QA screenshot hash mismatch for ${result.filename}: expected ${expected}, got ${trackedHash}`);
+    }
+    process.stdout.write(`verified ${result.filename}: sha256=${result.sha256}\n`);
+  }
+}
 
 function browserExecutable() {
   if (fs.existsSync(CHROME_PATH)) return CHROME_PATH;
@@ -43,7 +82,7 @@ async function scrollToStableEnd(page) {
   if (stableEndChecks < 2) throw new Error(`Page did not settle at its dynamic end: ${JSON.stringify(metrics)}`);
 }
 
-async function captureViewport(browser, baseUrl, viewport, outputDirectory) {
+async function captureViewport(browser, baseUrl, viewport, outputDirectory, writeArtifact) {
   const page = await browser.newPage({ viewport, reducedMotion: 'reduce' });
   try {
     await page.goto(`${baseUrl}/`, { waitUntil: 'load' });
@@ -89,21 +128,28 @@ async function captureViewport(browser, baseUrl, viewport, outputDirectory) {
     });
     const filename = `personal-landing-${viewport.width}x${viewport.height}.png`;
     const outputPath = path.join(outputDirectory, filename);
-    fs.writeFileSync(outputPath, Buffer.from(screenshot.data, 'base64'));
-    process.stdout.write(`${filename}: ${viewport.width}x${pageHeight}, lazy images decoded\n`);
+    const bytes = Buffer.from(screenshot.data, 'base64');
+    const hash = sha256(bytes);
+    if (writeArtifact) fs.writeFileSync(outputPath, bytes);
+    process.stdout.write(`${filename}: ${viewport.width}x${pageHeight}, lazy images decoded, sha256=${hash}${writeArtifact ? '' : ' (memory only)'}\n`);
+    return { filename, sha256: hash };
   } finally {
     await page.close();
   }
 }
 
 async function main() {
+  const verify = process.argv.slice(2).includes('--verify');
   const repositoryRoot = path.resolve(__dirname, '..');
   const outputDirectory = path.join(repositoryRoot, 'docs', 'qa', 'screenshots');
-  fs.mkdirSync(outputDirectory, { recursive: true });
+  const manifestPath = path.join(outputDirectory, 'sha256.json');
+  if (!verify) fs.mkdirSync(outputDirectory, { recursive: true });
   const server = await startSiteServer();
   const browser = await chromium.launch({ executablePath: browserExecutable(), headless: true });
   try {
-    for (const viewport of VIEWPORTS) await captureViewport(browser, server.baseUrl, viewport, outputDirectory);
+    const results = [];
+    for (const viewport of VIEWPORTS) results.push(await captureViewport(browser, server.baseUrl, viewport, outputDirectory, !verify));
+    if (verify) verifyHashes(results, outputDirectory, manifestPath);
   } finally {
     await browser.close();
     await server.close();

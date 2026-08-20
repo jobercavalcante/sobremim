@@ -9,7 +9,7 @@ Ambiente: Chromium local (Google Chrome), Playwright do runtime Codex, servidor 
 
 ## Regressões automatizadas
 
-- Suíte completa: 57/57 testes aprovados; `tests/site.browser.test.cjs`: 4/4 testes aprovados. O contrato percorre toda a página antes de concluir a rede, coleta console e `requestfailed`, exige que toda requisição HTTP permaneça no servidor local e confirma o recurso lazy do caso ARTE.
+- Suíte completa: 58/58 testes aprovados; `tests/site.browser.test.cjs`: 4/4 testes aprovados. O contrato percorre toda a página antes de concluir a rede, coleta console e `requestfailed`, exige que toda requisição HTTP permaneça no servidor local e confirma o recurso lazy do caso ARTE.
 - Cada case agora requer por teste um rótulo `Problema.`, um rótulo `Decisão.` e ao menos uma imagem; as sete imagens de case exigem `loading="lazy"` e `decoding="async"`.
 - A marca de navegação e hero é o mesmo SVG local, semanticamente inspecionado com título, descrição, gradiente, telefone/código e dois nós. O favicon usa o mesmo vocabulário visual com cores explícitas; o PNG original permanece preservado como proveniência.
 - O contrato também fixa o H1 aprovado, o CTA `Falar comigo`, o foco do skip link, o CTA compacto do StreamNest, navegação por Enter/Escape, no-JS, reduced motion, Canvas Sonar por breakpoint, metadados e JSON-LD.
@@ -41,14 +41,14 @@ Ambiente: Chromium local (Google Chrome), Playwright do runtime Codex, servidor 
 
 As capturas são full-page, após rolagem incremental que carrega os assets lazy, confirma `complete && naturalWidth > 0`, aguarda `decode()` e torna todas as revelações visíveis. Para evitar artefatos conhecidos da captura full-page de Chromium com elementos `sticky`/`fixed`, a sessão de captura neutraliza somente a posição desses elementos; o conteúdo, CSS visual, assets, comportamento lazy e viewport são os entregues.
 
-Reprodução: execute `.\tests\capture-qa.ps1` a partir da raiz do projeto. O capturador versionado usa o mesmo Chromium e runtime da suíte, cobre os quatro viewports, ativa `prefers-reduced-motion` e encerra os controladores temporais somente depois de carregar e decodificar o conteúdo, congelando o quadro capturado. O comportamento completo dos controladores continua coberto pelos testes de navegador.
+Reprodução normal: execute `.\tests\capture-qa.ps1` a partir da raiz do projeto; cada captura gravada também emite seu SHA-256. Auditoria determinística: execute `.\tests\capture-qa.ps1 -Verify`. Esse modo gera os quatro PNGs apenas em memória, compara cada hash regenerado com o manifesto versionado `screenshots/sha256.json` e com o PNG rastreado correspondente, e não regrava artefatos. O teste de assets também rejeita manifesto ausente, incompleto ou divergente dos quatro PNGs rastreados. O capturador usa o mesmo Chromium e runtime da suíte, cobre os quatro viewports, ativa `prefers-reduced-motion` e encerra os controladores temporais somente depois de carregar e decodificar o conteúdo, congelando o quadro capturado. O comportamento completo dos controladores continua coberto pelos testes de navegador.
 
-| Viewport | Arquivo | Tamanho |
-|---|---|---:|
-| 360×800 | `screenshots/personal-landing-360x800.png` | 1.664.783 bytes |
-| 768×1024 | `screenshots/personal-landing-768x1024.png` | 2.915.973 bytes |
-| 1024×768 | `screenshots/personal-landing-1024x768.png` | 1.556.841 bytes |
-| 1440×1000 | `screenshots/personal-landing-1440x1000.png` | 1.767.311 bytes |
+| Viewport | Arquivo | Tamanho | SHA-256 |
+|---|---|---:|---|
+| 360×800 | `screenshots/personal-landing-360x800.png` | 1.664.783 bytes | `f924861f3e2665b185c1d63104ac2db9f3e389424f811457a9eb40356ac3739b` |
+| 768×1024 | `screenshots/personal-landing-768x1024.png` | 2.915.973 bytes | `94cb3c7412c84946c3c4c2495da0333866ac9fc3853bfe8454393946e06b9169` |
+| 1024×768 | `screenshots/personal-landing-1024x768.png` | 1.556.841 bytes | `16553c89f745ddd07bfe6bedc7320d6b8b7398ea79ec5860c47782fd669d6f5d` |
+| 1440×1000 | `screenshots/personal-landing-1440x1000.png` | 1.767.311 bytes | `f5f8b02a9f27841a59690cfe83f309c946706de9fd5b28de827d81cc5d576ac6` |
 
 Inspeção visual concluída nas quatro imagens: composição legível, CTA secundário presente, CTA StreamNest compacto em desktop, imagens carregadas e nenhum transbordamento horizontal. O rail lateral completo permanece visível em 1440px; em 1024px seu rótulo é ocultado, mantendo o progresso sem sobrepor o H1.
 
