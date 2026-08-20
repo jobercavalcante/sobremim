@@ -19,6 +19,47 @@ function metaContent(page, property) {
   return page.locator(`meta[property="${property}"]`).getAttribute('content');
 }
 
+async function scrollThroughPage(page) {
+  const previousInlineScrollBehavior = await page.evaluate(() => {
+    const previous = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    return previous;
+  });
+  let stableEndChecks = 0;
+  let previousLimit = -1;
+  let settled = { top: 0, limit: 0 };
+  const trace = [];
+  try {
+    for (let attempt = 0; attempt < 100 && stableEndChecks < 2; attempt += 1) {
+      await page.evaluate(async () => {
+        const step = Math.max(320, Math.floor(window.innerHeight * 0.72));
+        const limit = Math.max(document.documentElement.scrollHeight - window.innerHeight, 0);
+        window.scrollTo(0, Math.min(window.scrollY + step, limit));
+        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      });
+      await page.waitForTimeout(100);
+      settled = await page.evaluate(() => ({
+        top: Math.round(window.scrollY),
+        limit: Math.max(document.documentElement.scrollHeight - window.innerHeight, 0),
+        workHeight: Math.round(document.querySelector('#work').getBoundingClientRect().height),
+        imageHeights: Array.from(document.querySelectorAll('#work picture img'), (image) => Math.round(image.getBoundingClientRect().height)),
+      }));
+      const reachedEnd = settled.top >= settled.limit - 1;
+      stableEndChecks = reachedEnd && settled.limit === previousLimit ? stableEndChecks + 1 : 0;
+      previousLimit = settled.limit;
+      if (attempt < 5 || attempt % 20 === 19 || reachedEnd) trace.push({ attempt: attempt + 1, ...settled });
+    }
+    assert.ok(stableEndChecks >= 2, `page scroll must settle at its dynamic end: ${JSON.stringify({ settled, trace })}`);
+    await page.waitForTimeout(250);
+  } finally {
+    await page.evaluate((value) => { document.documentElement.style.scrollBehavior = value; }, previousInlineScrollBehavior);
+  }
+}
+
+async function waitForCaseImages(page) {
+  await page.waitForFunction(() => Array.from(document.querySelectorAll('#work picture img')).every((image) => image.complete && image.naturalWidth > 0));
+}
+
 test('site contract is exposed by the real browser and local network only', async () => {
   const server = await startSiteServer();
   const browser = await chromium.launch({ executablePath: browserExecutable(), headless: true });
@@ -26,13 +67,17 @@ test('site contract is exposed by the real browser and local network only', asyn
   const base = new URL(server.baseUrl);
   const blockedExternalRequests = [];
   const failedLocalResponses = [];
+  const requestedLocalUrls = new Set();
+  const consoleErrors = [];
+  const requestFailures = [];
 
   page.on('request', (request) => {
     const type = request.resourceType();
     const url = new URL(request.url());
-    if (['font', 'script', 'stylesheet'].includes(type) && ['http:', 'https:'].includes(url.protocol) && url.origin !== base.origin) {
+    if (['http:', 'https:'].includes(url.protocol) && url.origin !== base.origin) {
       blockedExternalRequests.push(`${type}: ${request.url()}`);
     }
+    if (url.origin === base.origin) requestedLocalUrls.add(`${url.pathname}${url.search}`);
   });
   page.on('response', (response) => {
     const url = new URL(response.url());
@@ -40,14 +85,25 @@ test('site contract is exposed by the real browser and local network only', asyn
       failedLocalResponses.push(`${response.status()} ${response.url()}`);
     }
   });
+  page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
+  page.on('requestfailed', (request) => requestFailures.push(request.url()));
 
   try {
     const indexResponse = await page.goto(`${server.baseUrl}/`, { waitUntil: 'load' });
+    await scrollThroughPage(page);
+    await waitForCaseImages(page);
     assert.equal(indexResponse && indexResponse.status(), 200, 'site/index.html must be served successfully');
-    assert.deepEqual(blockedExternalRequests, [], 'scripts, stylesheets and fonts must be local');
+    assert.deepEqual(blockedExternalRequests, [], 'every runtime request must remain local after a full-page scroll');
     assert.deepEqual(failedLocalResponses, [], 'local document and assets must not return 4xx/5xx responses');
+    assert.deepEqual(consoleErrors, [], 'full-page loading must not emit console errors');
+    assert.deepEqual(requestFailures, [], 'full-page loading must not produce failed requests');
+    assert.ok(requestedLocalUrls.has('/assets/projects/arteconectamente/arteconectamente-share-1200w.webp'), 'the full page must be scrolled before asserting its lazy case resources');
 
     assert.equal(await page.locator('h1').count(), 1, 'the page must expose exactly one h1');
+    assert.equal(await page.locator('h1').innerText(), 'O problema vem antes da tecnologia.', 'the approved H1 copy must remain exact');
+    const heroContact = page.locator('#hero a[href="mailto:jober.cavalcante@gmail.com"]');
+    assert.equal(await heroContact.count(), 1, 'hero must expose the approved direct-contact CTA');
+    assert.equal(await heroContact.innerText(), 'Falar comigo', 'hero direct-contact CTA must retain the approved copy');
     const main = page.locator('main#content');
     assert.equal(await main.count(), 1, 'main#content must be present exactly once');
     assert.ok(await main.isVisible(), 'main#content must be visible');
@@ -60,12 +116,17 @@ test('site contract is exposed by the real browser and local network only', asyn
     }
     for (const id of ['sonar-promos', 'streamnest', 'recanto-beija-flor', 'arteconectamente']) {
       assert.equal(await page.locator(`article#${id}`).count(), 1, `case article #${id} must be stable and unique`);
+      assert.equal(await page.locator(`article#${id} strong`, { hasText: 'Problema.' }).count(), 1, `${id} must identify its factual problem`);
+      assert.equal(await page.locator(`article#${id} strong`, { hasText: 'Decisão.' }).count(), 1, `${id} must identify its factual decision`);
+      assert.ok(await page.locator(`article#${id} picture img`).count() > 0, `${id} must retain visual evidence`);
     }
     for (const hook of ['data-reveal', 'data-circuit-stage', 'data-case-theme', 'data-nav-toggle', 'data-nav-panel', 'data-sonar-field', 'data-circuit-path', 'data-scroll-progress']) {
       assert.ok(await page.locator(`[${hook}]`).count() > 0, `${hook} hook is required for the enhancement layer`);
     }
     assert.equal(await page.locator('article#streamnest a[aria-disabled="true"]').count(), 1, 'StreamNest must have one dormant Play CTA');
     assert.equal(await page.locator('article#streamnest a[aria-disabled="true"]').getAttribute('href'), null, 'dormant StreamNest Play CTA must not navigate');
+    const dormantBox = await page.locator('article#streamnest [data-dormant-cta]').boundingBox();
+    assert.ok(dormantBox && dormantBox.height <= 64, 'dormant StreamNest CTA must remain compact instead of stretching with its artwork');
 
     const rasterImages = page.locator('img[src$=".png"], img[src$=".jpg"], img[src$=".jpeg"], img[src$=".webp"]');
     assert.ok(await rasterImages.count() > 0, 'portfolio must use local raster evidence');
@@ -76,6 +137,35 @@ test('site contract is exposed by the real browser and local network only', asyn
       const alt = await image.getAttribute('alt');
       assert.ok(alt && alt.trim().length > 4, 'raster images need meaningful alternative text');
     }
+    const caseImages = page.locator('#work picture img');
+    assert.ok(await caseImages.count() >= 7, 'case studies must retain their visual evidence images');
+    for (let index = 0; index < await caseImages.count(); index += 1) {
+      const image = caseImages.nth(index);
+      assert.equal(await image.getAttribute('loading'), 'lazy', 'case imagery must defer loading until it approaches the viewport');
+      assert.equal(await image.getAttribute('decoding'), 'async', 'case imagery must decode asynchronously');
+    }
+
+    assert.equal(await page.locator('#hero img').getAttribute('src'), '/assets/brand/logo-mark.svg', 'hero must use the faithful local vector mark');
+    assert.equal(await page.locator('nav > a img').getAttribute('src'), '/assets/brand/logo-mark.svg', 'navigation must use the same local vector mark');
+    assert.equal(await page.locator('link[rel="icon"]').getAttribute('href'), '/assets/brand/favicon.svg', 'favicon must remain a local vector asset');
+    const vectorContract = await page.evaluate(async () => {
+      const response = await fetch('/assets/brand/logo-mark.svg');
+      const document = new DOMParser().parseFromString(await response.text(), 'image/svg+xml');
+      const root = document.documentElement;
+      return {
+        title: document.querySelector('title')?.textContent || '',
+        description: document.querySelector('desc')?.textContent || '',
+        paths: document.querySelectorAll('path').length,
+        nodes: document.querySelectorAll('circle').length,
+        gradients: document.querySelectorAll('linearGradient stop').length,
+        colors: [...document.querySelectorAll('[stroke], stop')].map((element) => element.getAttribute('stroke') || element.getAttribute('stop-color')),
+        viewBox: root.getAttribute('viewBox'),
+      };
+    });
+    assert.equal(vectorContract.viewBox, '0 0 512 512', 'brand vector must retain a square source-independent viewBox');
+    assert.ok(vectorContract.title && vectorContract.description, 'brand vector must expose a title and description');
+    assert.ok(vectorContract.paths >= 5 && vectorContract.nodes >= 2 && vectorContract.gradients >= 2, 'brand vector must describe phone, code and two circuit nodes');
+    for (const color of ['#1773F4', '#1AE3E7', '#F2F5F7']) assert.ok(vectorContract.colors.includes(color), `brand vector must preserve ${color} from the approved palette`);
     assert.equal((await page.content()).includes('Daniiiii'), false, 'internal repository name must not leak into public copy');
 
     const skipLink = page.locator('a[href="#content"]').first();
@@ -83,6 +173,9 @@ test('site contract is exposed by the real browser and local network only', asyn
     await page.keyboard.press('Tab');
     assert.ok(await skipLink.isVisible(), 'the skip link must become visible when focused by keyboard');
     assert.equal(await page.evaluate(() => document.activeElement && document.activeElement.getAttribute('href')), '#content');
+    await page.keyboard.press('Enter');
+    assert.equal(await page.evaluate(() => location.hash), '#content', 'the keyboard skip link must navigate to main content');
+    assert.equal(await page.evaluate(() => document.activeElement === document.querySelector('main#content')), true, 'the keyboard skip link must transfer focus to main content');
 
     for (const caseName of ['Sonar Promos', 'StreamNest', 'Recanto Beija-Flor', 'ARTEconectaMENTE']) {
       const caseText = page.getByText(caseName, { exact: false }).first();
@@ -92,7 +185,7 @@ test('site contract is exposed by the real browser and local network only', asyn
     assert.ok(await page.getByText('em teste fechado', { exact: false }).count() > 0, 'Sonar must state its honest closed-test status');
     assert.ok(await page.getByText('pré-lançamento', { exact: false }).count() > 0, 'StreamNest must state its honest pre-launch status');
 
-    assert.equal(await page.locator('a[href="mailto:jober.cavalcante@gmail.com"]').count(), 1, 'contact email destination must be present');
+    assert.equal(await page.locator('#contact a[href="mailto:jober.cavalcante@gmail.com"]').count(), 1, 'contact section email destination must remain present');
     assert.equal(await page.locator('a[href="https://github.com/jobercavalcante"]').count(), 1, 'verified GitHub destination must be present');
 
     const navToggle = page.locator('[data-nav-toggle]').first();
@@ -128,7 +221,7 @@ test('visual design contract is resolved by Chromium and preserves static fallba
   const server = await startSiteServer();
   const browser = await chromium.launch({ executablePath: browserExecutable(), headless: true });
   const desktop = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
-  const mobile = await browser.newPage({ viewport: { width: 768, height: 1024 } });
+  const mobile = await browser.newPage({ viewport: { width: 768, height: 1024 }, reducedMotion: 'no-preference' });
   const reduced = await browser.newPage({ viewport: { width: 1024, height: 768 }, reducedMotion: 'reduce' });
   const noJavaScript = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1024, height: 768 } });
   const staticPage = await noJavaScript.newPage();
@@ -165,6 +258,51 @@ test('visual design contract is resolved by Chromium and preserves static fallba
       return { outlineWidth: style.outlineWidth, outlineStyle: style.outlineStyle, boxShadow: style.boxShadow };
     });
     assert.ok(Number.parseFloat(focus.outlineWidth) > 0 || focus.boxShadow !== 'none', 'keyboard focus must have a visible indicator');
+
+    const readinessStates = await mobile.locator('html').evaluate((root) => {
+      if (window.JoberPersonalLanding) window.JoberPersonalLanding.destroy();
+      const reveal = document.querySelector('[data-reveal]');
+      const panel = document.querySelector('[data-nav-panel]');
+      const path = document.querySelector('[data-circuit-path]');
+      root.classList.remove('reveal-ready', 'nav-ready', 'nav-open', 'circuit-ready');
+      root.style.removeProperty('--circuit-progress');
+      path.style.removeProperty('stroke-dasharray');
+      path.style.removeProperty('stroke-dashoffset');
+      document.querySelectorAll('[data-reveal]').forEach((element) => element.classList.remove('is-visible'));
+      reveal.style.transition = 'none';
+      const computed = () => ({
+        reveal: { opacity: getComputedStyle(reveal).opacity, transform: getComputedStyle(reveal).transform },
+        nav: getComputedStyle(panel).display,
+        circuit: { dasharray: getComputedStyle(path).strokeDasharray, dashoffset: getComputedStyle(path).strokeDashoffset },
+      });
+      const defaults = computed();
+      root.classList.add('reveal-ready', 'nav-ready', 'circuit-ready');
+      root.style.setProperty('--circuit-progress', '0');
+      reveal.classList.remove('is-visible');
+      const pending = computed();
+      reveal.classList.add('is-visible');
+      root.classList.add('nav-open');
+      root.style.setProperty('--circuit-progress', '1');
+      const active = computed();
+      return { defaults, pending, active };
+    });
+    assert.equal(readinessStates.defaults.reveal.opacity, '1', 'default reveal content remains opaque before enhancement');
+    assert.equal(readinessStates.defaults.reveal.transform, 'none', 'default reveal content has no displaced transform');
+    assert.equal(readinessStates.defaults.nav, 'grid', 'default mobile navigation remains usable before enhancement');
+    assert.equal(readinessStates.defaults.circuit.dasharray, 'none', 'default circuit is fully drawn before enhancement');
+    assert.match(readinessStates.defaults.circuit.dashoffset, /^0(?:px|%)?$/, 'default circuit starts with no concealed stroke');
+
+    assert.equal(readinessStates.pending.reveal.opacity, '0', 'ready-but-unrevealed content is hidden only after enhancement mounts');
+    assert.notEqual(readinessStates.pending.reveal.transform, 'none', 'ready-but-unrevealed content retains its entrance offset');
+    assert.equal(readinessStates.pending.nav, 'none', 'ready mobile navigation is closed until explicitly opened');
+    assert.match(readinessStates.pending.circuit.dasharray, /\d/, 'ready circuit receives a measurable stroke length');
+    assert.doesNotMatch(readinessStates.pending.circuit.dashoffset, /^0(?:px|%)?$/, 'ready circuit conceals its stroke before progress begins');
+
+    assert.equal(readinessStates.active.reveal.opacity, '1', 'active reveal content returns to full opacity');
+    assert.equal(readinessStates.active.reveal.transform, 'none', 'active reveal content returns to its resting position');
+    assert.equal(readinessStates.active.nav, 'grid', 'opened mobile navigation is visible');
+    assert.match(readinessStates.active.circuit.dasharray, /\d/, 'active circuit keeps its measurable stroke length');
+    assert.match(readinessStates.active.circuit.dashoffset, /^0(?:px|%)?$/, 'completed circuit exposes the full stroke');
 
     await desktop.locator('html').evaluate((element) => element.classList.add('reveal-ready'));
     const reveal = desktop.locator('[data-reveal]').first();
@@ -211,6 +349,8 @@ test('narrative layout remains contained and readable at supported viewports', a
     for (const viewport of viewports) {
       const page = await browser.newPage({ viewport });
       await page.goto(`${server.baseUrl}/`);
+      await scrollThroughPage(page);
+      await waitForCaseImages(page);
       const metrics = await page.evaluate(() => ({
         scrollWidth: document.documentElement.scrollWidth,
         clientWidth: document.documentElement.clientWidth,
@@ -220,6 +360,10 @@ test('narrative layout remains contained and readable at supported viewports', a
       assert.ok(metrics.scrollWidth <= metrics.clientWidth, `${viewport.width}px layout must not horizontally overflow`);
       assert.ok(metrics.bodyFontSize >= 16, `${viewport.width}px body text must remain readable`);
       assert.ok(metrics.headingSize <= 96, `${viewport.width}px headline must remain at or below 6rem`);
+      if (viewport.width === 1024) {
+        const railLabel = await page.locator('[data-scroll-progress] span').evaluate((element) => getComputedStyle(element).display);
+        assert.equal(railLabel, 'none', 'the intermediate desktop rail keeps progress without colliding with the H1 label');
+      }
       await page.close();
     }
   } finally {
@@ -251,6 +395,13 @@ test('progressive interaction controllers mount safely and preserve keyboard beh
     await desktop.waitForFunction(() => document.querySelectorAll('[data-sonar-field] canvas').length === 0);
     await desktop.setViewportSize({ width: 1440, height: 900 });
     await desktop.waitForFunction(() => document.querySelectorAll('[data-sonar-field] canvas').length === 1);
+    const sonarLayout = await desktop.locator('[data-sonar-field]').evaluate(async (element) => {
+      const before = element.getBoundingClientRect().height;
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      const after = element.getBoundingClientRect().height;
+      return { before, after };
+    });
+    assert.ok(Math.abs(sonarLayout.after - sonarLayout.before) < 1, `Sonar canvas must not make its container grow continuously: ${JSON.stringify(sonarLayout)}`);
     assert.equal(await mobile.locator('[data-sonar-field] canvas').count(), 0, 'mobile must not mount a Sonar canvas');
     assert.equal(await reduced.locator('[data-sonar-field] canvas').count(), 1, 'reduced motion draws a static Sonar frame');
     await desktop.waitForFunction(() => Array.from(document.querySelectorAll('[data-reveal]')).every((element) => element.classList.contains('is-visible')));

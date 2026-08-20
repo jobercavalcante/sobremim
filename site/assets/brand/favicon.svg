@@ -1,3 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Jober Cavalcante">
-  <path fill="currentColor" d="M91 78a23 23 0 0 0 0 46v121h74a23 23 0 1 0 0-46h-28v-75h94c7 0 13 6 13 13v171a59 59 0 0 0 59 59h108a23 23 0 1 0 0-46H303c-7 0-13-6-13-13V137a59 59 0 0 0-59-59H91Zm158 84a41 41 0 0 0-41 41v105a41 41 0 0 0 41 41h85a41 41 0 0 0 41-41V203a41 41 0 0 0-41-41h-85Zm0 46h85v95h-85v-95Zm17 25-27 23 27 23 15-18-6-5 6-5-15-18Zm50 0-15 18 6 5-6 5 15 18 27-23-27-23Zm-1 127a23 23 0 0 0-23 23v23c0 7 6 13 13 13h88a23 23 0 1 0 0-46h-55v-13a23 23 0 0 0-23-23Z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="favicon-title">
+  <title id="favicon-title">Jober Cavalcante</title>
+  <path d="M347 233V154c0-22-18-40-40-40H203c-22 0-40 18-40 40v205c0 22 18 40 40 40h65c17 0 30-13 30-30v-10c0-17 13-30 30-30h18l27-28" fill="none" stroke="#1AE3E7" stroke-linecap="round" stroke-linejoin="round" stroke-width="20"/>
+  <path d="m226 213-27 27 27 27m65-54 27 27-27 27m-20-28-17 56m101 91 29-29m-50 54 29-29" fill="none" stroke="#F2F5F7" stroke-linecap="round" stroke-linejoin="round" stroke-width="18"/>
+  <circle cx="373" cy="300" r="18" fill="#1773F4"/><circle cx="405" cy="328" r="18" fill="#1AE3E7"/>
 </svg>

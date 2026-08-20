@@ -23,8 +23,8 @@ Build and fully verify Jober Cavalcante's narrative personal landing page from t
 | T4 | SVG circuit engine | integration-executor | gpt-5.6-terra / medium | T3 | DONE | clean after fix round 1 | 6/6 lifecycle + 46/46 browser/assets |
 | T5 | Progressive enhancement and Sonar field | integration-executor | gpt-5.6-terra / medium | T4 | DONE | clean after fix round 1 | 56/56 complete suite, zero skips |
 | T6 | OG and crawler assets | mechanical-executor | gpt-5.6-luna / xhigh | T3 | DONE | clean | asset 44/44 + complete suite 57/57 |
-| T7 | Integrated QA and evidence | integration-executor | gpt-5.6-terra / medium | T2-T6 | IN PROGRESS | task-reviewer pending | static, browser, mobile, a11y, SEO, performance |
-| T8 | Complete change-set review | final-reviewer | gpt-5.6-sol / medium | T7 | PLANNED | pending | full evidence bundle |
+| T7 | Integrated QA and evidence | integration-executor | gpt-5.6-terra / medium | T2-T6 | DONE | task-reviewer pending | 57/57 full suite; browser 4/4, full-scroll lazy network, visual evidence |
+| T8 | Complete change-set review | final-reviewer | gpt-5.6-sol / medium | T7 | IN PROGRESS | pending | full evidence bundle |
 
 ## Decisions
 
@@ -38,10 +38,9 @@ Build and fully verify Jober Cavalcante's narrative personal landing page from t
 
 ## Current risks
 
-- Source screenshots may include third-party imagery; asset inventory must select only appropriate, non-confidential material.
-- Space Grotesk and Manrope must be copied only from local assets with a compatible license or replaced by system fallbacks.
-- Lighthouse availability is not yet confirmed.
-- Git repository began without commits and with user reference material untracked; every commit must use explicit paths.
+- The public deployment origin is still unknown; canonical metadata remains root-relative and no sitemap can be generated honestly yet.
+- Lighthouse is unavailable in the local runtime; the missing metric and the non-installing browser/manual fallback are documented in the QA report.
+- The root checkout still contains user-owned untracked reference material; every commit and the local merge must preserve it with explicit paths.
 
 ## Evidence log
 
@@ -64,3 +63,4 @@ Build and fully verify Jober Cavalcante's narrative personal landing page from t
 - 2026-08-19: T5 delivered progressive nav/reveals/active state, circuit orchestration, honest dormant feedback and bounded Sonar in `467d608`. Review reproduced a desktop→mobile Canvas/RAF leak; `1a30ab0` added controller stop, responsive unmount/remount and unit plus Chromium regression coverage. Fresh re-review was clean at 56/56 tests.
 - 2026-08-19: T6 delivered a deterministic 1200×630 HTML-rendered OG image, local composition source and crawlable `robots.txt` in `7ea5ad7`. Independent review validated pixels, local-only dependencies, relative metadata and the deliberate absence of Sitemap; 57/57 full-suite checks passed.
 - 2026-08-19: Ruling: integrated QA persists four full-page screenshots and closes every deferred review Minor in executable browser contracts — visual evidence and known coverage gaps must be part of the final-review bundle; cost if wrong: four binary artifacts and additional browser assertions are tracked in the repository.
+- 2026-08-20: T7 closed all deferred Minors in real Chromium: exact H1, incremental full-page/lazy network coverage, and computed default/pending/active readiness gates. QA found and corrected the missing hero mail CTA, skip-link focus transfer, desktop StreamNest CTA stretch, 1024px rail collision and a self-amplifying Sonar Canvas/ResizeObserver layout loop. It also made every case state a factual Problema/Decisão pair, added lazy/async case imagery and replaced nav/hero/favicon vectors with a faithful translation of the original smartphone-code-circuit mark. Four full-page visual artifacts were recaptured with real lazy loading and inspected; the complete suite passes 57/57. Lighthouse is unavailable locally and is documented as a non-installing fallback in `docs/qa/personal-landing-qa.md`.

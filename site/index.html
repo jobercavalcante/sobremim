@@ -32,17 +32,17 @@
       </div>
     </nav>
   </header>
-  <main id="content">
+  <main id="content" tabindex="-1">
     <section id="hero" aria-labelledby="hero-title">
       <p class="kicker">Jober Cavalcante · Desenvolvedor Sênior Full Stack</p>
       <h1 id="hero-title">O problema vem antes da tecnologia.</h1>
       <p>Há mais de 15 anos, trabalho entre sistemas que precisam continuar funcionando e produtos que ainda precisam provar que podem funcionar.</p>
       <p>Atuação de Tech Lead · GLPI &amp; ITSM · Produto e IA aplicada</p>
-      <a href="#process">Ver decisões em prática</a>
-      <picture>
-        <source type="image/webp" srcset="/assets/brand/jober-console-256w.webp 256w, /assets/brand/jober-console-512w.webp 512w" sizes="(max-width: 640px) 256px, 512px">
-        <img src="/assets/brand/logo-console.png" width="512" height="512" alt="Logo original de Jober Cavalcante: smartphone, código e conexões de circuito">
-      </picture>
+      <div class="hero-actions">
+        <a href="#process">Ver decisões em prática</a>
+        <a href="mailto:jober.cavalcante@gmail.com">Falar comigo</a>
+      </div>
+      <picture><img src="/assets/brand/logo-mark.svg" width="512" height="512" alt="Marca de Jober Cavalcante: smartphone aberto, código e conexões de circuito"></picture>
     </section>
 
     <section id="process" aria-labelledby="process-title">
@@ -63,54 +63,55 @@
       <p class="kicker">Decisões em prática</p><h2 id="work-title">Quatro contextos, uma forma de investigar.</h2>
       <article class="case case--sonar" id="sonar-promos" data-case-theme="sonar" data-reveal>
         <p class="kicker">Produto Android · em teste fechado</p><h3>Sonar Promos</h3>
-        <p>Monitora fontes escolhidas da conta Telegram e transforma volume de mensagens em alertas por palavras-chave.</p>
-        <p>Feed, resumo e agrupamento heurístico ajudam a separar sinais do volume, sem prometer busca em todos os grupos ou IA já entregue.</p>
+        <p><strong>Problema.</strong> Fontes escolhidas da conta Telegram podem concentrar um volume de mensagens difícil de acompanhar.</p>
+        <p><strong>Decisão.</strong> Alertas por palavras-chave, feed, resumo e agrupamento heurístico ajudam a separar sinais do volume, sem prometer busca em todos os grupos ou IA já entregue.</p>
         <div data-sonar-field aria-label="Campo visual local de sinais do Sonar Promos"></div>
         <picture>
           <source type="image/webp" srcset="/assets/projects/sonar-promos/sonar-promos-overview-640w.webp 640w, /assets/projects/sonar-promos/sonar-promos-overview-1200w.webp 1200w" sizes="(max-width: 720px) 100vw, 1200px">
-          <img src="/assets/projects/sonar-promos/sonar-promos-social-preview.png" width="1200" height="630" alt="Preview da interface escura do aplicativo Sonar Promos">
+          <img src="/assets/projects/sonar-promos/sonar-promos-social-preview.png" width="1200" height="630" loading="lazy" decoding="async" alt="Preview da interface escura do aplicativo Sonar Promos">
         </picture>
         <picture>
           <source type="image/webp" srcset="/assets/projects/sonar-promos/sonar-promos-alerts-320w.webp 320w, /assets/projects/sonar-promos/sonar-promos-alerts-620w.webp 620w" sizes="(max-width: 720px) 50vw, 620px">
-          <img src="/assets/projects/sonar-promos/sonar-dark.png" width="620" height="1340" alt="Tela de alertas do Sonar Promos em um telefone">
+          <img src="/assets/projects/sonar-promos/sonar-dark.png" width="620" height="1340" loading="lazy" decoding="async" alt="Tela de alertas do Sonar Promos em um telefone">
         </picture>
       </article>
       <article class="case case--streamnest" id="streamnest" data-case-theme="streamnest" data-reveal>
         <p class="kicker">Produto Android · pré-lançamento</p><h3>StreamNest</h3>
-        <p>Uma biblioteca pessoal de vídeos de fontes Telegram, pensada para reprodução local, DLNA e Chromecast.</p>
-        <p>A compatibilidade com DLNA varia conforme a rede e os formatos; o produto não é afiliado ao Telegram.</p>
+        <p><strong>Problema.</strong> Vídeos de fontes Telegram ficam dispersos no fluxo pessoal de mensagens.</p>
+        <p><strong>Decisão.</strong> Uma biblioteca pessoal para reprodução local, DLNA e Chromecast; a compatibilidade varia conforme rede e formatos, e o produto não é afiliado ao Telegram.</p>
         <a aria-disabled="true" aria-describedby="play-status" data-dormant-cta role="button" tabindex="0">Disponível em breve na Play</a>
         <p id="play-status" data-play-status role="status" hidden></p>
         <picture>
           <source type="image/webp" srcset="/assets/projects/streamnest/streamnest-library-640w.webp 640w, /assets/projects/streamnest/streamnest-library-1200w.webp 1200w" sizes="(max-width: 720px) 100vw, 1200px">
-          <img src="/assets/projects/streamnest/streamnest-social-preview.png" width="1200" height="630" alt="Biblioteca de vídeos do StreamNest em uma composição para compartilhamento">
+          <img src="/assets/projects/streamnest/streamnest-social-preview.png" width="1200" height="630" loading="lazy" decoding="async" alt="Biblioteca de vídeos do StreamNest em uma composição para compartilhamento">
         </picture>
         <picture>
           <source type="image/webp" srcset="/assets/projects/streamnest/streamnest-icon-320w.webp 320w, /assets/projects/streamnest/streamnest-icon-768w.webp 768w" sizes="(max-width: 720px) 160px, 320px">
-          <img src="/assets/projects/streamnest/icon.png" width="1254" height="1254" alt="Ícone do aplicativo StreamNest">
+          <img src="/assets/projects/streamnest/icon.png" width="1254" height="1254" loading="lazy" decoding="async" alt="Ícone do aplicativo StreamNest">
         </picture>
       </article>
       <article class="case case--recanto" id="recanto-beija-flor" data-case-theme="recanto" data-reveal>
         <p class="kicker">Narrativa e experiência · Rochedo-MS e online</p><h3>Recanto Beija-Flor</h3>
-        <p>Uma landing terapêutica em que a narrativa, a atmosfera e a experiência organizam o encontro com o espaço.</p>
-        <p>O trabalho explora linguagem e acolhimento sem transformar a experiência em alegação de eficácia.</p>
+        <p><strong>Problema.</strong> A presença digital precisava organizar o encontro com o espaço e o acolhimento sem prometer eficácia.</p>
+        <p><strong>Decisão.</strong> Uma landing terapêutica em que narrativa, atmosfera e experiência organizam esse encontro.</p>
         <a href="https://recanto-beijaflor.pages.dev/" target="_blank" rel="noopener noreferrer">Conhecer o Recanto Beija-Flor</a>
         <picture>
           <source type="image/webp" srcset="/assets/projects/recanto-beija-flor/recanto-beija-flor-logo-256w.webp 256w, /assets/projects/recanto-beija-flor/recanto-beija-flor-logo-512w.webp 512w" sizes="(max-width: 720px) 256px, 512px">
-          <img src="/assets/projects/recanto-beija-flor/logo.jpg" width="512" height="512" alt="Logo do Recanto Beija-Flor">
+          <img src="/assets/projects/recanto-beija-flor/logo.jpg" width="512" height="512" loading="lazy" decoding="async" alt="Logo do Recanto Beija-Flor">
         </picture>
       </article>
       <article class="case case--arte" id="arteconectamente" data-case-theme="arte" data-reveal>
         <p class="kicker">Linguagem editorial e voz autoral</p><h3>ARTEconectaMENTE / DaNiKa Poeta Vis-UaU</h3>
-        <p>Uma experiência editorial que adapta a composição digital à voz autoral do projeto.</p>
+        <p><strong>Problema.</strong> A voz poética e visual do projeto precisava ser traduzida sem recorrer a um template genérico.</p>
+        <p><strong>Decisão.</strong> Uma experiência editorial que adapta a composição digital à voz autoral do projeto.</p>
         <a href="https://arteconectamente.pages.dev/" target="_blank" rel="noopener noreferrer">Conhecer ARTEconectaMENTE</a>
         <picture>
           <source type="image/webp" srcset="/assets/projects/arteconectamente/arteconectamente-share-640w.webp 640w, /assets/projects/arteconectamente/arteconectamente-share-1200w.webp 1200w" sizes="(max-width: 720px) 100vw, 1200px">
-          <img src="/assets/projects/arteconectamente/og-share.webp" width="1568" height="823" alt="Composição editorial do projeto ARTEconectaMENTE">
+          <img src="/assets/projects/arteconectamente/og-share.webp" width="1568" height="823" loading="lazy" decoding="async" alt="Composição editorial do projeto ARTEconectaMENTE">
         </picture>
         <picture>
           <source type="image/webp" srcset="/assets/projects/arteconectamente/arteconectamente-arte-375w.webp 375w, /assets/projects/arteconectamente/arteconectamente-arte-750w.webp 750w" sizes="(max-width: 720px) 50vw, 375px">
-          <img src="/assets/projects/arteconectamente/arte-mente-alma.png" width="750" height="750" alt="Arte editorial de mente e alma do projeto ARTEconectaMENTE">
+          <img src="/assets/projects/arteconectamente/arte-mente-alma.png" width="750" height="750" loading="lazy" decoding="async" alt="Arte editorial de mente e alma do projeto ARTEconectaMENTE">
         </picture>
       </article>
     </section>
