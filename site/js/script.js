@@ -342,7 +342,7 @@
     const MAX = 42;
     const hint = document.createElement("span");
     hint.className = "term-line term-hint";
-    hint.textContent = "> digite para enviar o sinal";
+    hint.textContent = "> digite algo para falar comigo";
     bootEl.appendChild(hint);
 
     const line = document.createElement("span");
@@ -355,7 +355,7 @@
     field.setAttribute("autocomplete", "off");
     field.setAttribute("autocapitalize", "off");
     field.setAttribute("spellcheck", "false");
-    field.setAttribute("aria-label", "Terminal jober.os · digite para enviar o sinal");
+    field.setAttribute("aria-label", "Terminal jober.os · digite algo para falar comigo");
     bootEl.append(line, field);
 
     const typed = line.querySelector(".term-typed");
@@ -381,7 +381,7 @@
       if (ev.key === "Enter") {
         ev.preventDefault();
         const msg = field.value.trim();
-        if (msg) echo("sinal: «" + msg.slice(0, MAX) + "»");
+        if (msg) echo("recebi: «" + msg.slice(0, MAX) + "»");
         resetPrompt();
         return;
       }
@@ -401,7 +401,7 @@
     function triggerGlitch() {
       glitching = true;
       window.dispatchEvent(new CustomEvent("screen:glitch"));
-      echo("!!! sinal corrompido · restabelecendo link !!!", true);
+      echo("!!! ops, a tela deu uma travadinha proposital · voltando já !!!", true);
       line.style.display = "none";
       field.blur();
       setTimeout(() => {
@@ -421,7 +421,7 @@
     ctaChip.classList.add("is-live");
     const txt = ctaChip.querySelector(".cta-chip__text");
     if (!txt) return;
-    const msgs = ["sinal recebido", "processando problema", "pronto para o próximo", "feito com ia assistida"];
+    const msgs = ["oi! tudo bem?", "estou te ouvindo", "pronto para o próximo desafio", "feito com ajuda da ia"];
     if (reduced.matches) {
       txt.textContent = msgs[msgs.length - 1];
       return;
@@ -460,7 +460,7 @@
   const ctaChipEl = document.getElementById("cta-chip");
   if (EASTER_ENABLED && ctaChipEl) {
     ctaChipEl.addEventListener("click", () => {
-      showToast("psst… este site foi feito com IA assistida: análise, código, testes e revisão, com a decisão humana no comando. jober.os");
+      showToast("psst… este site foi feito com ajuda da IA: análise, código, testes e revisão, sempre com decisão humana no comando. jober.os");
       window.dispatchEvent(new CustomEvent("board:surge")); // a placa responde
     });
   }
